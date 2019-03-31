@@ -26,6 +26,15 @@ class TopicModel extends Model {
     notifyListeners();
   }
 
+  bool contains(String title) {
+    for(Topic topic in topics) {
+      if(topic.title == title) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   factory TopicModel.fromJson(Map<String, dynamic> json) => _$TopicModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TopicModelToJson(this);

@@ -19,7 +19,7 @@ class AddTopicFormState extends State<AddTopicForm> {
   String description;
 
   bool _validation = false;
-
+  
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -77,6 +77,8 @@ class AddTopicFormState extends State<AddTopicForm> {
 
   String _validateTitle(String value) {
     if (value.isEmpty) return 'Title of the topic can not be empty';
+    TopicModel model = ScopedModel.of<TopicModel>(context);
+    if (model.contains(value)) return 'Topic with this title already exists!';
     return null;
   }
 
