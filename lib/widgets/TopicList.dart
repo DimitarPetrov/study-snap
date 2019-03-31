@@ -10,9 +10,8 @@ class TopicList extends StatelessWidget {
         builder: (context, child, topics) => ListView(
               scrollDirection: Axis.horizontal,
               children: topics.topics
-                  .map((topic) => Topic(
-                        title: topic.title,
-                        description: topic.description,
+                  .map((topic) => TopicWidget(
+                        topic: topic,
                       ))
                   .toList(),
             ));
