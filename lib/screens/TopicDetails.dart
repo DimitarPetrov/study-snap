@@ -90,7 +90,6 @@ class TopicDetailsState extends State<TopicDetails>{
     File image = await ImagePicker.pickImage(
       source: ImageSource.camera,
     );
-    print(image.path);
     saveImage(image);
   }
 
@@ -107,7 +106,6 @@ class TopicDetailsState extends State<TopicDetails>{
     int count = prefs.getInt(widget.topic.title) ?? 0;
     String path =
         appDocDir.path + '/' + widget.topic.title + '/' + count.toString();
-    print(path);
     image.copy(path);
     prefs.setInt(widget.topic.title, ++count);
     _getImages();
