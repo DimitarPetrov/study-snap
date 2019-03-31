@@ -32,7 +32,8 @@ dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
   shared_preferences: 0.5.1+2
-  image_picker_saver: 0.1.0
+  image_picker: 0.5.0+9
+  path_provider: 0.5.0+1
 
 
 # For information on the generic Dart part of this file, see the

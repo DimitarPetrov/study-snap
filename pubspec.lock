@@ -193,13 +193,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
-  image_picker_saver:
+  image_picker:
     dependency: "direct dev"
     description:
-      name: image_picker_saver
+      name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.5.0+9"
   io:
     dependency: transitive
     description:
@@ -284,6 +284,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.2"
+  path_provider:
+    dependency: "direct dev"
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0+1"
   pedantic:
     dependency: transitive
     description:

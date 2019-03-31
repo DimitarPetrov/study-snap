@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Topic.dart';
 import 'package:study_snap/models/TopicModel.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
 class AddTopicForm extends StatefulWidget {
@@ -19,7 +22,7 @@ class AddTopicFormState extends State<AddTopicForm> {
   String description;
 
   bool _validation = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -92,6 +95,8 @@ class AddTopicFormState extends State<AddTopicForm> {
       model.add(Topic(title: title, description: description));
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('topics', json.encode(model.toJson()));
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      new Directory(appDocDir.path + '/' + title).create(recursive: true);
       Navigator.pop(context);
     }
   }
