@@ -20,14 +20,15 @@ class Topic extends StatelessWidget {
                   title,
                   style: Theme.of(context).textTheme.body1,
                 ),
+                subtitle: Padding(
+                  padding: EdgeInsets.only(top: 7.5),
+                  child: Text(
+                    description,
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                ),
               ),
               Divider(),
-              ListTile(
-                title: Text(
-                  description,
-                  style: Theme.of(context).textTheme.overline,
-                ),
-              )
             ],
           ),
           color: Theme.of(context).cardColor,

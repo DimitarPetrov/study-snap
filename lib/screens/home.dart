@@ -12,12 +12,11 @@ class Home extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Column(
           children: <Widget>[
+            const SizedBox(height: 200),
             Expanded(
-              child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 200, left: 5, right: 5, bottom: 150),
-                  child: TopicList()),
+              child: TopicList(),
             ),
+            const SizedBox(height: 150),
           ],
         ),
       ),
