@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Topic.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:study_snap/util/utils.dart';
 
 class TopicDetails extends StatefulWidget {
 
@@ -79,7 +80,7 @@ class TopicDetailsState extends State<TopicDetails>{
 
   void _getImages() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    Directory topicHome = new Directory(appDocDir.uri.resolve(widget.topic.title).path);
+    Directory topicHome = new Directory(appDocDir.uri.resolve(stripWhitespaces(widget.topic.title)).path);
     List<Image> images = topicHome.listSync().map((image) => Image.file(image)).toList();
     setState((){
       _images = images;
@@ -105,7 +106,7 @@ class TopicDetailsState extends State<TopicDetails>{
     final prefs = await SharedPreferences.getInstance();
     int count = prefs.getInt(widget.topic.title) ?? 0;
     String path =
-        appDocDir.path + '/' + widget.topic.title + '/' + count.toString();
+        appDocDir.path + '/' + stripWhitespaces(widget.topic.title) + '/' + count.toString();
     image.copy(path);
     prefs.setInt(widget.topic.title, ++count);
     _getImages();

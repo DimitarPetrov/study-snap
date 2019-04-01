@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:study_snap/models/Topic.dart';
 import 'package:study_snap/screens/TopicDetails.dart';
+import 'package:study_snap/util/utils.dart';
 
 class TopicWidget extends StatefulWidget {
   final Topic topic;
@@ -82,7 +83,7 @@ class TopicWidgetState extends State<TopicWidget> {
   void _getImages() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     Directory topicHome =
-        new Directory(appDocDir.uri.resolve(widget.topic.title).path);
+        new Directory(appDocDir.uri.resolve(stripWhitespaces(widget.topic.title)).path);
     List<Image> images =
         topicHome.listSync().map((image) => Image.file(image)).toList();
     setState(() {

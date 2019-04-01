@@ -8,6 +8,8 @@ import 'package:study_snap/models/TopicModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
+import 'package:study_snap/util/utils.dart';
+
 class AddTopicForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -96,7 +98,7 @@ class AddTopicFormState extends State<AddTopicForm> {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('topics', json.encode(model.toJson()));
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      new Directory(appDocDir.path + '/' + title).create(recursive: true);
+      new Directory(appDocDir.path + '/' + stripWhitespaces(title)).create(recursive: true);
       Navigator.pop(context);
     }
   }
