@@ -22,10 +22,10 @@ Future<List<ImageDTO>> getImages(String title) async {
   return topicHome.list().map((image) => ImageDTO(image: Image.file(image), sequence: extractSequence(image.path))).toList();
 }
 
-Future<Image> getOriginalImage(String title, int sequence) async {
+Future<File> getOriginalImage(String title, int sequence) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String imagePath = appDocDir.uri.resolve(stripWhitespaces(title)).path + "/" + sequence.toString();
-  return Image.file(File(imagePath));
+  return File(imagePath);
 }
 
 void cleanUp(String title) async {
