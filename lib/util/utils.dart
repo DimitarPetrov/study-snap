@@ -12,5 +12,5 @@ String stripWhitespaces(String str) {
 Future<List<Image>> getImages(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   Directory topicHome = new Directory(appDocDir.uri.resolve(stripWhitespaces(title)).path);
-  return topicHome.listSync().map((image) => Image.file(image)).toList();
+  return topicHome.list().map((image) => Image.file(image)).toList();
 }

@@ -5,50 +5,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Topic.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_snap/util/utils.dart';
+import 'package:study_snap/widgets/Grid.dart';
 
-class TopicDetails extends StatefulWidget {
-
+class TopicDetails extends StatelessWidget {
   TopicDetails({Key key, this.topic}) : super(key: key);
 
   final Topic topic;
 
   @override
-  State<StatefulWidget> createState() {
-    return TopicDetailsState();
-  }
-
-}
-
-class TopicDetailsState extends State<TopicDetails>{
-
-  List<Image> _images = <Image>[];
-
-  @override
-  void initState() {
-    super.initState();
-    _getImages();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context, _images),
-        ),
-        title: Text(widget.topic.title),
+        title: Text(topic.title),
       ),
-      body: GridView.count(
-        crossAxisCount: (orientation == Orientation.portrait) ? 2 : 3,
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        padding: const EdgeInsets.all(4.0),
-        childAspectRatio: (orientation == Orientation.portrait) ? 1.0 : 1.3,
-        children: _images,
+      body: Grid(
+        topic: topic,
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -81,16 +52,11 @@ class TopicDetailsState extends State<TopicDetails>{
     );
   }
 
-  void _getImages() async {
-    List<Image> images = await getImages(widget.topic.title);
-    setState((){
-      _images = images;
-    });
-  }
-
   void openCamera() async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.camera,
+      maxWidth: 500,
+      maxHeight: 500,
     );
     saveImage(image);
   }
@@ -98,6 +64,8 @@ class TopicDetailsState extends State<TopicDetails>{
   void openGallery() async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.gallery,
+      maxWidth: 500,
+      maxHeight: 500,
     );
     saveImage(image);
   }
@@ -105,11 +73,13 @@ class TopicDetailsState extends State<TopicDetails>{
   void saveImage(File image) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     final prefs = await SharedPreferences.getInstance();
-    int count = prefs.getInt(widget.topic.title) ?? 0;
-    String path =
-        appDocDir.path + '/' + stripWhitespaces(widget.topic.title) + '/' + count.toString();
+    int count = prefs.getInt(topic.title) ?? 0;
+    String path = appDocDir.path +
+        '/' +
+        stripWhitespaces(topic.title) +
+        '/' +
+        count.toString();
     image.copy(path);
-    prefs.setInt(widget.topic.title, ++count);
-    _getImages();
+    prefs.setInt(topic.title, ++count);
   }
 }
