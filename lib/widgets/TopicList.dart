@@ -38,14 +38,12 @@ class TopicList extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
           title: new Text("Really delete this topic?"),
           content: new Text(
               "Be aware that this will lead to deleteion of all the images associated with"
               "this topic. If you do not have a separate copy they will be permanently lost!"),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Yes"),
               onPressed: () async {

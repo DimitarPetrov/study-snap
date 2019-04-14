@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +36,10 @@ class TopicDetailsState extends State<TopicDetails>{
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context, _images),
+        ),
         title: Text(widget.topic.title),
       ),
       body: GridView.count(
@@ -79,9 +82,7 @@ class TopicDetailsState extends State<TopicDetails>{
   }
 
   void _getImages() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    Directory topicHome = new Directory(appDocDir.uri.resolve(stripWhitespaces(widget.topic.title)).path);
-    List<Image> images = topicHome.listSync().map((image) => Image.file(image)).toList();
+    List<Image> images = await getImages(widget.topic.title);
     setState((){
       _images = images;
     });
