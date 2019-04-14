@@ -43,6 +43,7 @@ class TopicWidget extends StatelessWidget {
               Expanded(
                 child: Grid(
                   topic: topic,
+                  clickable : false,
                 ),
               ),
             ],

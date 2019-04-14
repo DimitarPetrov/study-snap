@@ -4,6 +4,7 @@ import 'package:study_snap/widgets/TopicList.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(
         title: Text('Study Snap'),
@@ -12,11 +13,11 @@ class Home extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Column(
           children: <Widget>[
-            const SizedBox(height: 200),
+            (orientation == Orientation.portrait) ? const SizedBox(height: 200) : const SizedBox(),
             Expanded(
               child: TopicList(),
             ),
-            const SizedBox(height: 150),
+            (orientation == Orientation.portrait) ? const SizedBox(height: 150) : const SizedBox(),
           ],
         ),
       ),

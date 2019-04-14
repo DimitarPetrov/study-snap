@@ -7,19 +7,30 @@ import 'package:image_picker/image_picker.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/Grid.dart';
 
-class TopicDetails extends StatelessWidget {
+class TopicDetails extends StatefulWidget {
   TopicDetails({Key key, this.topic}) : super(key: key);
 
   final Topic topic;
 
   @override
+  State<StatefulWidget> createState() {
+    return TopicDetailsState();
+  }
+
+
+}
+
+class TopicDetailsState extends State<TopicDetails> {
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(topic.title),
+        title: Text(widget.topic.title),
       ),
       body: Grid(
-        topic: topic,
+        topic: widget.topic,
+        clickable: true,
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -73,13 +84,16 @@ class TopicDetails extends StatelessWidget {
   void saveImage(File image) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     final prefs = await SharedPreferences.getInstance();
-    int count = prefs.getInt(topic.title) ?? 0;
+    int count = prefs.getInt(widget.topic.title) ?? 0;
     String path = appDocDir.path +
         '/' +
-        stripWhitespaces(topic.title) +
+        stripWhitespaces(widget.topic.title) +
         '/' +
         count.toString();
     image.copy(path);
-    prefs.setInt(topic.title, ++count);
+    prefs.setInt(widget.topic.title, ++count);
+    setState(() {
+      // just reloads grid
+    });
   }
 }
