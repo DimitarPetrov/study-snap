@@ -99,6 +99,7 @@ class AddTopicFormState extends State<AddTopicForm> {
       prefs.setString('topics', json.encode(model.toJson()));
       Directory appDocDir = await getApplicationDocumentsDirectory();
       new Directory(appDocDir.path + '/' + stripWhitespaces(title)).create(recursive: true);
+      new Directory(appDocDir.path + '/' + stripWhitespaces(title) + "_th").create(recursive: true);
       Navigator.pop(context);
     }
   }

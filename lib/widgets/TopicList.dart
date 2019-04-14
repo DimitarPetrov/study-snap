@@ -50,8 +50,7 @@ class TopicList extends StatelessWidget {
                 model.remove(topic);
                 final prefs = await SharedPreferences.getInstance();
                 prefs.setString('topics', json.encode(model.toJson()));
-                Directory appDocDir = await getApplicationDocumentsDirectory();
-                new Directory(appDocDir.path + '/' + stripWhitespaces(topic.title)).delete(recursive: true);
+                cleanUp(topic.title);
                 Navigator.pop(context);
               },
             ),

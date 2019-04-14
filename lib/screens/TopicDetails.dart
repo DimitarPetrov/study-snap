@@ -6,6 +6,7 @@ import 'package:study_snap/models/Topic.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/Grid.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 class TopicDetails extends StatefulWidget {
   TopicDetails({Key key, this.topic}) : super(key: key);
@@ -66,8 +67,6 @@ class TopicDetailsState extends State<TopicDetails> {
   void openCamera() async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.camera,
-      maxWidth: 500,
-      maxHeight: 500,
     );
     saveImage(image);
   }
@@ -75,8 +74,6 @@ class TopicDetailsState extends State<TopicDetails> {
   void openGallery() async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.gallery,
-      maxWidth: 500,
-      maxHeight: 500,
     );
     saveImage(image);
   }
@@ -90,7 +87,19 @@ class TopicDetailsState extends State<TopicDetails> {
         stripWhitespaces(widget.topic.title) +
         '/' +
         count.toString();
+
     image.copy(path);
+
+    String thumbnail_path = appDocDir.path +
+        '/' +
+        stripWhitespaces(widget.topic.title) + "_th"
+        '/' +
+        count.toString();
+
+    ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+    File thumbnail = await FlutterNativeImage.compressImage(image.path, targetWidth: 500, targetHeight: (properties.height * 500 / properties.width).round());
+
+    thumbnail.copy(thumbnail_path);
     prefs.setInt(widget.topic.title, ++count);
     setState(() {
       // just reloads grid
