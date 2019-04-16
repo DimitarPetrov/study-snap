@@ -29,13 +29,13 @@ class Grid extends StatelessWidget {
             children: snapshot.data.map((ImageDTO image) {
               return GridTile(
                   child:
-                      clickable ? clickableTile(image, topic, context) : image.image);
+                      clickable ? clickableTile(image, topic, snapshot.data.length, context) : image.image);
             }).toList(),
           );
         });
   }
 
-  Widget clickableTile(ImageDTO image, Topic topic, BuildContext context) {
+  Widget clickableTile(ImageDTO image, Topic topic, int length, BuildContext context) {
     return GestureDetector(
       child: Hero(
         tag: image.sequence,
@@ -47,6 +47,7 @@ class Grid extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => ImageScreen(
                       topic: topic,
+                      length: length,
                       sequence: image.sequence,
                     )));
       },
