@@ -10,67 +10,48 @@ import 'package:study_snap/models/TopicModel.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/Grid.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:study_snap/widgets/dialog.dart';
 
-class TopicDetails extends StatefulWidget {
+class TopicDetails extends StatelessWidget {
   TopicDetails({Key key, this.topic}) : super(key: key);
 
   final Topic topic;
 
   @override
-  State<StatefulWidget> createState() {
-    return TopicDetailsState();
-  }
-}
-
-class TopicDetailsState extends State<TopicDetails> {
-  @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TopicModel>(
       builder: (context, child, model) => Scaffold(
             appBar: AppBar(
-              title: Text(widget.topic.title),
+              title: Text(topic.title),
             ),
             body: Grid(
-              topic: widget.topic,
+              topic: topic,
               clickable: true,
               deleteCallback: _showDeleteDialog,
             ),
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _showDialog(context, model);
+                _showImagePickingDialog(context, model);
               },
             ),
           ),
     );
   }
 
-  void _showDialog(BuildContext context, TopicModel model) {
+  void _showImagePickingDialog(BuildContext context, TopicModel model) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Text('Take a picture'),
-                    onTap: () {
-                      _openCamera(model);
-                    },
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                  ),
-                  GestureDetector(
-                    child: Text('Select from gallery'),
-                    onTap: () {
-                      _openGallery(model);
-                    },
-                  ),
-                ],
-              ),
-            ),
+          return TwoOptionsDialog(
+            first: 'Take a picture',
+            firstOnTap: () {
+              _openCamera(model);
+            },
+            second: 'Select from gallery',
+            secondOnTap: () {
+              _openGallery(model);
+            },
           );
         });
   }
@@ -90,41 +71,26 @@ class TopicDetailsState extends State<TopicDetails> {
   }
 
   void _saveImage(File image, TopicModel model) async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    final prefs = await SharedPreferences.getInstance();
-    int count = prefs.getInt(widget.topic.title) ?? 0;
-    String path = appDocDir.path +
-        '/' +
-        stripWhitespaces(widget.topic.title) +
-        '/' +
-        count.toString();
+    int count = await getImageCount(topic);
 
+    String mainDir = await getMainDirectory(topic);
+    String path = mainDir + '/' + count.toString();
     image.copy(path);
 
-    String thumbnail_path = appDocDir.path +
-        '/' +
-        stripWhitespaces(widget.topic.title) +
-        "_th"
-        '/' +
-        count.toString();
+    String thDir = await getThumbnailDirectory(topic);
+    String thumbnailPath = thDir + '/' + count.toString();
 
-    ImageProperties properties =
-        await FlutterNativeImage.getImageProperties(image.path);
-    File thumbnail = await FlutterNativeImage.compressImage(image.path,
-        targetWidth: 500,
-        targetHeight: (properties.height * 500 / properties.width).round());
+    File thumbnail = await generateThumbnail(image.path);
+    thumbnail.copy(thumbnailPath);
 
-    thumbnail.copy(thumbnail_path);
-    model.addIndex(widget.topic, count);
-    prefs.setString('topics', json.encode(model.toJson()));
-    prefs.setInt(widget.topic.title, ++count);
-    setState(() {
-      // just reloads grid
-    });
+    model.addIndex(topic, count);
+
+    persistTopicsJson(json.encode(model.toJson()));
+    persistTopicCount(topic, ++count);
   }
 
-  void _showDeleteDialog(int index) {
-    showDialog(
+  Future _showDeleteDialog(BuildContext context, int index) {
+    return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -133,17 +99,13 @@ class TopicDetailsState extends State<TopicDetails> {
               new FlatButton(
                   child: new Text("Yes"),
                   onPressed: () async {
-                    deleteImage(widget.topic.title, index);
-                    final prefs = await SharedPreferences.getInstance();
-                    TopicModel model = ScopedModel.of<TopicModel>(context);
-                    model.removeIndex(widget.topic, index);
-                    prefs.setString('topics', json.encode(model.toJson()));
-                    Navigator.pop(context);
+                    deleteImage(context, topic, index);
+                    Navigator.pop(context, true);
                   }),
               new FlatButton(
                 child: new Text("No"),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, false);
                 },
               ),
             ],

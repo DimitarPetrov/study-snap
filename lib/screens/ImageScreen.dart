@@ -3,7 +3,7 @@ import 'package:study_snap/models/Topic.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:photo_view/photo_view.dart';
 
-typedef void DeleteCallback(int index);
+typedef Future DeleteCallback(BuildContext context, int index);
 
 class ImageScreen extends StatefulWidget {
   final Topic topic;
@@ -31,9 +31,19 @@ class ImageScreenState extends State<ImageScreen> {
         title: Text(widget.topic.title),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              // TODO
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              widget.deleteCallback(widget.topic.indexes[index]);
+              widget.deleteCallback(context, widget.topic.indexes[index]).then((val) {
+                if(val) {
+                  Navigator.pop(context);
+                }
+              });
             },
           )
         ],
@@ -53,21 +63,20 @@ class ImageScreenState extends State<ImageScreen> {
         child: Center(
           child: Hero(
             tag: widget.topic.indexes[index],
-            child: getImage(),
+            child: _getImage(),
           ),
         ),
       ),
     );
   }
 
-  Widget getImage() {
+  Widget _getImage() {
     return FutureBuilder(
       future: getOriginalImage(widget.topic.title, widget.topic.indexes[index]),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return new Container(
               alignment: FractionalOffset.center,
-              padding: const EdgeInsets.only(top: 10.0),
               child: new CircularProgressIndicator());
         }
         return PhotoView(

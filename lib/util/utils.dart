@@ -1,10 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Image.dart';
 import 'package:path/path.dart';
+import 'package:study_snap/models/Topic.dart';
+import 'package:study_snap/models/TopicModel.dart';
+
+typedef void UpdateModelCallback(TopicModel model);
 
 String stripWhitespaces(String str) {
   return str.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
@@ -43,16 +50,59 @@ void cleanUp(String title) async {
   prefs.remove(title);
 }
 
-void deleteImage(String title, int index) async {
+void deleteImage(BuildContext context, Topic topic, int index) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   deleteImageByDirectory(
-      new Directory(appDocDir.path + '/' + stripWhitespaces(title)), index);
-  deleteImageByDirectory(
-      new Directory(appDocDir.path + '/' + stripWhitespaces(title) + "_th"),
+      new Directory(appDocDir.path + '/' + stripWhitespaces(topic.title)),
       index);
+  deleteImageByDirectory(
+      new Directory(
+          appDocDir.path + '/' + stripWhitespaces(topic.title) + "_th"),
+      index);
+  updateModel(context, (TopicModel model) => model.removeIndex(topic, index));
+}
+
+void updateModel(BuildContext context, UpdateModelCallback callback) async {
+  final prefs = await SharedPreferences.getInstance();
+  TopicModel model = ScopedModel.of<TopicModel>(context);
+  callback(model);
+  prefs.setString('topics', json.encode(model.toJson()));
 }
 
 void deleteImageByDirectory(Directory directory, int index) {
   File.fromUri(directory.uri.resolve(index.toString()))
       .deleteSync(recursive: true);
+}
+
+Future<String> getMainDirectory(Topic topic) async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  return appDocDir.path + '/' + stripWhitespaces(topic.title);
+}
+
+Future<String> getThumbnailDirectory(Topic topic) async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  return appDocDir.path + '/' + stripWhitespaces(topic.title) + "_th";
+}
+
+Future<int> getImageCount(Topic topic) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getInt(topic.title) ?? 0;
+}
+
+void persistTopicsJson(String json) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString('topics', json);
+}
+
+void persistTopicCount(Topic topic, int count) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setInt(topic.title, count);
+}
+
+Future<File> generateThumbnail(String path) async {
+  ImageProperties properties =
+      await FlutterNativeImage.getImageProperties(path);
+  return FlutterNativeImage.compressImage(path,
+      targetWidth: 500,
+      targetHeight: (properties.height * 500 / properties.width).round());
 }

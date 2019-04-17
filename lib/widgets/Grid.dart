@@ -3,8 +3,9 @@ import 'package:study_snap/models/Image.dart';
 import 'package:study_snap/models/Topic.dart';
 import 'package:study_snap/screens/ImageScreen.dart';
 import 'package:study_snap/util/utils.dart';
+import 'package:study_snap/widgets/dialog.dart';
 
-class Grid extends StatefulWidget {
+class Grid extends StatelessWidget {
   final Topic topic;
   final bool clickable;
   final DeleteCallback deleteCallback;
@@ -13,16 +14,9 @@ class Grid extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return GridState();
-  }
-}
-
-class GridState extends State<Grid> {
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageDTO>>(
-        future: getImages(widget.topic.title),
+        future: getImages(topic.title),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return new Container(
@@ -38,7 +32,7 @@ class GridState extends State<Grid> {
             crossAxisSpacing: 1.5,
             children: snapshot.data.map((ImageDTO image) {
               return GridTile(
-                child: widget.clickable
+                child: clickable
                     ? _clickableTile(context, image)
                     : image.image,
               );
@@ -58,16 +52,38 @@ class GridState extends State<Grid> {
           context,
           MaterialPageRoute(
             builder: (context) => ImageScreen(
-                  topic: widget.topic,
-                  index: widget.topic.indexes.indexOf(image.sequence),
-                  deleteCallback: widget.deleteCallback,
+                  topic: topic,
+                  index: topic.indexes.indexOf(image.sequence),
+                  deleteCallback: deleteCallback,
                 ),
           ),
         );
       },
       onLongPress: () {
-        widget.deleteCallback(image.sequence);
+        _showDialog(context, image);
       },
     );
   }
+
+  void _showDialog(BuildContext context, ImageDTO image) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TwoOptionsDialog(
+            first: 'Delete',
+            firstOnTap: () {
+              deleteCallback(context, image.sequence).then((val) {
+                if (val) {
+                  Navigator.pop(context);
+                }
+              });
+            },
+            second: 'Share',
+            secondOnTap: () {
+              //TODO
+            },
+          );
+        });
+  }
+
 }
