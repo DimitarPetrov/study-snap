@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/util/utils.dart';
@@ -32,8 +35,10 @@ class ImageScreenState extends State<ImageScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
-            onPressed: () {
-              // TODO
+            onPressed: () async {
+              int sequence = widget.topic.indexes[index];
+              File f = await getOriginalImage(widget.topic.title, sequence);
+              await Share.file(widget.topic.title, sequence.toString() + ".jpg", f.readAsBytesSync(), 'image/jpg');
             },
           ),
           IconButton(
