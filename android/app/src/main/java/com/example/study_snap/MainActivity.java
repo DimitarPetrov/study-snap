@@ -1,4 +1,4 @@
-package dnp.study_snap;
+package com.example.study_snap;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

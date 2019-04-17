@@ -11,11 +11,12 @@ class TopicWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 175,
+      width: 250,
       child: Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
         child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(30)),
           onTap: () {
             Navigator.push(
               context,

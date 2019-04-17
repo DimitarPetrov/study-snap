@@ -13,11 +13,11 @@ class Home extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Column(
           children: <Widget>[
-            (orientation == Orientation.portrait) ? const SizedBox(height: 200) : const SizedBox(),
+            (orientation == Orientation.portrait) ? const SizedBox(height: 125) : const SizedBox(),
             Expanded(
               child: TopicList(),
             ),
-            (orientation == Orientation.portrait) ? const SizedBox(height: 150) : const SizedBox(),
+            (orientation == Orientation.portrait) ? const SizedBox(height: 125) : const SizedBox(),
           ],
         ),
       ),

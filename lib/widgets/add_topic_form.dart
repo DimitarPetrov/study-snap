@@ -35,7 +35,7 @@ class AddTopicFormState extends State<AddTopicForm> {
         children: <Widget>[
           const SizedBox(height: 24.0),
           TextFormField(
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               filled: true,
@@ -50,7 +50,7 @@ class AddTopicFormState extends State<AddTopicForm> {
           ),
           const SizedBox(height: 24.0),
           TextFormField(
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               filled: true,
