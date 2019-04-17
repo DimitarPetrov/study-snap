@@ -26,7 +26,6 @@ class TopicList extends StatelessWidget {
                         ),
                         child: TopicWidget(
                           topic: topic,
-                          indexes: topic.indexes,
                         ),
                       ))
                   .toList(),

@@ -5,9 +5,8 @@ import 'package:study_snap/widgets/Grid.dart';
 
 class TopicWidget extends StatelessWidget {
   final Topic topic;
-  final List<int> indexes;
 
-  TopicWidget({Key key, this.topic, this.indexes}) : super(key: key);
+  TopicWidget({Key key, this.topic}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class TopicWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TopicDetails(topic: topic, indexes: indexes),
+                builder: (context) => TopicDetails(topic: topic),
               ),
             );
           },
@@ -45,7 +44,6 @@ class TopicWidget extends StatelessWidget {
                 child: Grid(
                   topic: topic,
                   clickable : false,
-                  indexes: indexes,
                 ),
               ),
             ],

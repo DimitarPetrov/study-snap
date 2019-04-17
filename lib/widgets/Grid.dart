@@ -1,26 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Image.dart';
 import 'package:study_snap/models/Topic.dart';
-import 'package:study_snap/models/TopicModel.dart';
 import 'package:study_snap/screens/ImageScreen.dart';
 import 'package:study_snap/util/utils.dart';
 
 class Grid extends StatefulWidget {
   final Topic topic;
   final bool clickable;
-  final List<int> indexes;
+  final DeleteCallback deleteCallback;
 
-  Grid({Key key, this.topic, this.clickable, this.indexes}) : super(key: key);
+  Grid({Key key, this.topic, this.clickable, this.deleteCallback})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     return GridState();
   }
-
 }
 
 class GridState extends State<Grid> {
@@ -35,6 +30,7 @@ class GridState extends State<Grid> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: new CircularProgressIndicator());
           }
+          snapshot.data.sort((i1, i2) => i1.sequence.compareTo(i2.sequence));
           return GridView.count(
             crossAxisCount: 3,
             childAspectRatio: 1.0,
@@ -43,8 +39,7 @@ class GridState extends State<Grid> {
             children: snapshot.data.map((ImageDTO image) {
               return GridTile(
                 child: widget.clickable
-                    ? _clickableTile(
-                        image, widget.topic, snapshot.data.length, context)
+                    ? _clickableTile(context, image)
                     : image.image,
               );
             }).toList(),
@@ -52,8 +47,7 @@ class GridState extends State<Grid> {
         });
   }
 
-  Widget _clickableTile(
-      ImageDTO image, Topic topic, int length, BuildContext context) {
+  Widget _clickableTile(BuildContext context, ImageDTO image) {
     return InkWell(
       child: Hero(
         tag: image.sequence,
@@ -64,54 +58,16 @@ class GridState extends State<Grid> {
           context,
           MaterialPageRoute(
             builder: (context) => ImageScreen(
-                  topic: topic,
-                  length: length,
-                  sequence: image.sequence,
-                  indexes: widget.indexes,
+                  topic: widget.topic,
+                  index: widget.topic.indexes.indexOf(image.sequence),
+                  deleteCallback: widget.deleteCallback,
                 ),
           ),
         );
       },
       onLongPress: () {
-        _showDialog(
-          context,
-          topic.title,
-          image.sequence,
-        );
+        widget.deleteCallback(image.sequence);
       },
     );
-  }
-
-  void _showDialog(BuildContext context, String title, int index) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Really delete this image?"),
-            actions: <Widget>[
-              new FlatButton(
-                  child: new Text("Yes"),
-                  onPressed: () async {
-                    deleteImage(title, index);
-                    final prefs = await SharedPreferences.getInstance();
-                    TopicModel model = ScopedModel.of<TopicModel>(context);
-                    print(json.encode(model.toJson()));
-                    model.topics.singleWhere((t) => t.title == widget.topic.title).removeIndex(widget.topic.title, index);
-                    prefs.setString('topics', json.encode(model.toJson()));
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                child: new Text("No"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        }).then((val) {
-          setState(() {
-
-          });
-    });
   }
 }

@@ -21,6 +21,16 @@ class TopicModel extends Model {
     notifyListeners();
   }
 
+  void addIndex(Topic topic, int index) {
+    topics[topics.indexOf(topic)].addIndex(index);
+    notifyListeners();
+  }
+
+  void removeIndex(Topic topic, int index) {
+    topics[topics.indexOf(topic)].removeIndex(index);
+    notifyListeners();
+  }
+
   void remove(Topic topic) {
     topics.remove(topic);
     notifyListeners();

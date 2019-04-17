@@ -11,12 +11,12 @@ class Topic {
 
   Topic({this.title, this.description, this.indexes});
 
-  void addIndex(String title, int index) {
+  void addIndex(int index) {
     indexes.add(index);
     indexes.sort();
   }
 
-  void removeIndex(String title, int index) {
+  void removeIndex(int index) {
     indexes.remove(index);
   }
 

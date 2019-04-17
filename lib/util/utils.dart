@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/Image.dart';
 import 'package:path/path.dart';
-import 'package:study_snap/models/TopicModel.dart';
 
 String stripWhitespaces(String str) {
   return str.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
