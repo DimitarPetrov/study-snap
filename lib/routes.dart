@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_snap/screens/addTopic.dart';
+import 'package:study_snap/screens/add_topic.dart';
 import 'package:study_snap/screens/home.dart';
 
 class StudySnap extends StatelessWidget {

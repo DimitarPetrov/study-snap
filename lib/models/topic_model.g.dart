@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'TopicModel.dart';
+part of 'topic_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

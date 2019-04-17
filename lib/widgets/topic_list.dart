@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_snap/models/Topic.dart';
-import 'package:study_snap/models/TopicModel.dart';
+import 'package:study_snap/models/topic.dart';
+import 'package:study_snap/models/topic_model.dart';
 import 'package:study_snap/util/utils.dart';
-import 'package:study_snap/widgets/Topic.dart';
+import 'package:study_snap/widgets/topic.dart';
 
 class TopicList extends StatelessWidget {
   @override

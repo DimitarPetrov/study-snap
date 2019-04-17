@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:scoped_model/scoped_model.dart';
-import 'package:study_snap/models/Topic.dart';
+import 'package:study_snap/models/topic.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'TopicModel.g.dart';
+part 'topic_model.g.dart';
 
 @JsonSerializable()
 class TopicModel extends Model {

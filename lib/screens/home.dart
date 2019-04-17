@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_snap/widgets/TopicList.dart';
+import 'package:study_snap/widgets/topic_list.dart';
 
 class Home extends StatelessWidget {
   @override

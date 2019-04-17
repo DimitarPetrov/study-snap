@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:study_snap/models/Topic.dart';
-import 'package:study_snap/screens/TopicDetails.dart';
-import 'package:study_snap/widgets/Grid.dart';
+import 'package:study_snap/models/topic.dart';
+import 'package:study_snap/screens/topic_details.dart';
+import 'package:study_snap/widgets/grid.dart';
 
 class TopicWidget extends StatelessWidget {
   final Topic topic;

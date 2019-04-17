@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_snap/models/Topic.dart';
+import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:photo_view/photo_view.dart';
 

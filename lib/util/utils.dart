@@ -6,10 +6,10 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_snap/models/Image.dart';
+import 'package:study_snap/models/image.dart';
 import 'package:path/path.dart';
-import 'package:study_snap/models/Topic.dart';
-import 'package:study_snap/models/TopicModel.dart';
+import 'package:study_snap/models/topic.dart';
+import 'package:study_snap/models/topic_model.dart';
 
 typedef void UpdateModelCallback(TopicModel model);
 

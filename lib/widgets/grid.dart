@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:study_snap/models/Image.dart';
-import 'package:study_snap/models/Topic.dart';
-import 'package:study_snap/screens/ImageScreen.dart';
+import 'package:study_snap/models/image.dart';
+import 'package:study_snap/models/topic.dart';
+import 'package:study_snap/screens/image_screen.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/dialog.dart';
 

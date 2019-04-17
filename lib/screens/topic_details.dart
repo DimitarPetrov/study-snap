@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_snap/models/Topic.dart';
+import 'package:study_snap/models/topic.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:study_snap/models/TopicModel.dart';
+import 'package:study_snap/models/topic_model.dart';
 import 'package:study_snap/util/utils.dart';
-import 'package:study_snap/widgets/Grid.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:study_snap/widgets/grid.dart';
 import 'package:study_snap/widgets/dialog.dart';
 
 class TopicDetails extends StatelessWidget {
