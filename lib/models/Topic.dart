@@ -7,8 +7,18 @@ class Topic {
 
   final String title;
   final String description;
+  List<int> indexes;
 
-  Topic({this.title, this.description});
+  Topic({this.title, this.description, this.indexes});
+
+  void addIndex(String title, int index) {
+    indexes.add(index);
+    indexes.sort();
+  }
+
+  void removeIndex(String title, int index) {
+    indexes.remove(index);
+  }
 
   factory Topic.fromJson(Map<String, dynamic> json) => _$TopicFromJson(json);
 

@@ -26,6 +26,7 @@ class TopicList extends StatelessWidget {
                         ),
                         child: TopicWidget(
                           topic: topic,
+                          indexes: topic.indexes,
                         ),
                       ))
                   .toList(),
@@ -39,7 +40,7 @@ class TopicList extends StatelessWidget {
         return AlertDialog(
           title: new Text("Really delete this topic?"),
           content: new Text(
-              "Be aware that this will lead to deleteion of all the images associated with"
+              "Be aware that this will lead to deleteion of all the images associated with "
               "this topic. If you do not have a separate copy they will be permanently lost!"),
           actions: <Widget>[
             new FlatButton(

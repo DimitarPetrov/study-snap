@@ -94,7 +94,7 @@ class AddTopicFormState extends State<AddTopicForm> {
     } else {
       form.save();
       TopicModel model = ScopedModel.of<TopicModel>(context);
-      model.add(Topic(title: title, description: description));
+      model.add(Topic(title: title, description: description, indexes: []));
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('topics', json.encode(model.toJson()));
       Directory appDocDir = await getApplicationDocumentsDirectory();
