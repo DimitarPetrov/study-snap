@@ -98,8 +98,8 @@ class AddTopicFormState extends State<AddTopicForm> {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('topics', json.encode(model.toJson()));
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      new Directory(appDocDir.path + '/' + stripWhitespaces(title)).create(recursive: true);
-      new Directory(appDocDir.path + '/' + stripWhitespaces(title) + "_th").create(recursive: true);
+      new Directory(appDocDir.path + '/' + encode(title)).create(recursive: true);
+      new Directory(appDocDir.path + '/' + encode(title) + "_th").create(recursive: true);
       Navigator.pop(context);
     }
   }

@@ -13,8 +13,8 @@ import 'package:study_snap/models/topic_model.dart';
 
 typedef void UpdateModelCallback(TopicModel model);
 
-String stripWhitespaces(String str) {
-  return str.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+String encode(String str) {
+  return base64Encode(utf8.encode(str.replaceAll(new RegExp(r"\s+\b|\b\s"), "")));
 }
 
 int extractSequence(String path) {
@@ -24,7 +24,7 @@ int extractSequence(String path) {
 Future<List<ImageDTO>> getImages(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   Directory topicHome = new Directory(
-      appDocDir.uri.resolve(stripWhitespaces(title)).path + "_th");
+      appDocDir.uri.resolve(encode(title)).path + "_th");
   return topicHome
       .list()
       .map((f) =>
@@ -34,7 +34,7 @@ Future<List<ImageDTO>> getImages(String title) async {
 
 Future<File> getOriginalImage(String title, int sequence) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  String imagePath = appDocDir.uri.resolve(stripWhitespaces(title)).path +
+  String imagePath = appDocDir.uri.resolve(encode(title)).path +
       "/" +
       sequence.toString();
   return File(imagePath);
@@ -42,9 +42,9 @@ Future<File> getOriginalImage(String title, int sequence) async {
 
 void cleanUp(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  new Directory(appDocDir.path + '/' + stripWhitespaces(title))
+  new Directory(appDocDir.path + '/' + encode(title))
       .delete(recursive: true);
-  new Directory(appDocDir.path + '/' + stripWhitespaces(title) + "_th")
+  new Directory(appDocDir.path + '/' + encode(title) + "_th")
       .delete(recursive: true);
   final prefs = await SharedPreferences.getInstance();
   prefs.remove(title);
@@ -53,11 +53,11 @@ void cleanUp(String title) async {
 void deleteImage(BuildContext context, Topic topic, int index) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   deleteImageByDirectory(
-      new Directory(appDocDir.path + '/' + stripWhitespaces(topic.title)),
+      new Directory(appDocDir.path + '/' + encode(topic.title)),
       index);
   deleteImageByDirectory(
       new Directory(
-          appDocDir.path + '/' + stripWhitespaces(topic.title) + "_th"),
+          appDocDir.path + '/' + encode(topic.title) + "_th"),
       index);
   updateModel(context, (TopicModel model) => model.removeIndex(topic, index));
 }
@@ -76,12 +76,12 @@ void deleteImageByDirectory(Directory directory, int index) {
 
 Future<String> getMainDirectory(Topic topic) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  return appDocDir.path + '/' + stripWhitespaces(topic.title);
+  return appDocDir.path + '/' + encode(topic.title);
 }
 
 Future<String> getThumbnailDirectory(Topic topic) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  return appDocDir.path + '/' + stripWhitespaces(topic.title) + "_th";
+  return appDocDir.path + '/' + encode(topic.title) + "_th";
 }
 
 Future<int> getImageCount(Topic topic) async {
