@@ -13,8 +13,9 @@ class Grid extends StatelessWidget {
   final Topic topic;
   final bool clickable;
   final DeleteCallback deleteCallback;
+  final ScrollController controller;
 
-  Grid({Key key, this.topic, this.clickable, this.deleteCallback})
+  Grid({Key key, this.topic, this.clickable, this.deleteCallback, this.controller})
       : super(key: key);
 
   @override
@@ -30,6 +31,7 @@ class Grid extends StatelessWidget {
           }
           snapshot.data.sort((i1, i2) => i1.sequence.compareTo(i2.sequence));
           return GridView.count(
+            controller: controller,
             crossAxisCount: 3,
             childAspectRatio: 1.0,
             mainAxisSpacing: 1.5,

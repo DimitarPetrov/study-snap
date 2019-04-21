@@ -8,28 +8,63 @@ import 'package:study_snap/models/topic_model.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/topic.dart';
 
-class TopicList extends StatelessWidget {
+class TopicList extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return TopicListState();
+  }
+}
+
+class TopicListState extends State<TopicList> {
+  List<Topic> _topics;
+  ScrollController _gridController;
+
+  @override
+  void initState() {
+    _gridController = ScrollController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TopicModel>(
-        builder: (context, child, topics) => ListView(
-              scrollDirection: Axis.horizontal,
-              children: topics.topics
-                  .map((topic) => Dismissible(
-                        key: Key(topic.title),
-                        direction: DismissDirection.up,
-                        confirmDismiss: (direction) {
-                          _showDialog(context, topic, topics);
-                        },
-                        background: Container(
+      builder: (context, child, topics) {
+        _topics = topics.topics;
+        return ReorderableListView(
+            onReorder: _onReorder,
+            scrollDirection: Axis.horizontal,
+            children: _topics
+                .map((topic) => Dismissible(
+                      key: Key(topic.title),
+                      direction: DismissDirection.up,
+                      confirmDismiss: (direction) {
+                        _showDialog(context, topic, topics);
+                      },
+                      background: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
                           color: Colors.red,
                         ),
-                        child: TopicWidget(
-                          topic: topic,
-                        ),
-                      ))
-                  .toList(),
-            ));
+                      ),
+                      child: TopicWidget(
+                        topic: topic,
+                        controller: _gridController,
+                      ),
+                    ))
+                .toList());
+      },
+    );
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final Topic item = _topics.removeAt(oldIndex);
+      _topics.insert(newIndex, item);
+    });
+    persistTopicsJson(json.encode(TopicModel(topics: _topics)));
   }
 
   void _showDialog(BuildContext context, Topic topic, TopicModel model) {
