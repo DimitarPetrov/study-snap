@@ -1,73 +1,78 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_snap/models/subject.dart';
+import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:study_snap/models/topic_model.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/grid.dart';
 import 'package:study_snap/widgets/dialog.dart';
 
 class TopicDetails extends StatelessWidget {
-  TopicDetails({Key key, this.topic}) : super(key: key);
-
+  final Subject subject;
   final Topic topic;
+
+  TopicDetails({Key key, this.subject, this.topic}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<TopicModel>(
-      builder: (context, child, model) => Scaffold(
-            appBar: AppBar(
-              title: Text(topic.title),
-            ),
-            body: Grid(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(topic.title),
+      ),
+      body: ScopedModelDescendant<SubjectModel>(
+        builder: (context, child, model) => Grid(
               topic: topic,
               clickable: true,
               deleteCallback: _showDeleteDialog,
             ),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                _showImagePickingDialog(context, model);
-              },
-            ),
-          ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          _showImagePickingDialog(context);
+        },
+      ),
     );
   }
 
-  void _showImagePickingDialog(BuildContext context, TopicModel model) {
+  void _showImagePickingDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return TwoOptionsDialog(
             first: 'Take a picture',
             firstOnTap: () {
-              _openCamera(model);
+              _openCamera(context);
             },
             second: 'Select from gallery',
             secondOnTap: () {
-              _openGallery(model);
+              _openGallery(context);
             },
           );
         });
   }
 
-  void _openCamera(TopicModel model) async {
+  void _openCamera(BuildContext context) async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.camera,
     );
-    _saveImage(image, model);
+    if (image != null) {
+      _saveImage(context, image);
+    }
   }
 
-  void _openGallery(TopicModel model) async {
+  void _openGallery(BuildContext context) async {
     File image = await ImagePicker.pickImage(
       source: ImageSource.gallery,
     );
-    _saveImage(image, model);
+    if (image != null) {
+      _saveImage(context, image);
+    }
   }
 
-  void _saveImage(File image, TopicModel model) async {
+  void _saveImage(BuildContext context, File image) async {
     int count = await getImageCount(topic);
 
     String mainDir = await getMainDirectory(topic);
@@ -80,9 +85,8 @@ class TopicDetails extends StatelessWidget {
     File thumbnail = await generateThumbnail(image.path);
     thumbnail.copy(thumbnailPath);
 
-    model.addIndex(topic, count);
+    updateModel(context, (model) => model.addIndex(subject, topic, count));
 
-    persistTopicsJson(json.encode(model.toJson()));
     persistTopicCount(topic, ++count);
   }
 
@@ -96,7 +100,7 @@ class TopicDetails extends StatelessWidget {
               new FlatButton(
                   child: new Text("Yes"),
                   onPressed: () async {
-                    deleteImage(context, topic, index);
+                    deleteImage(context, subject, topic, index);
                     Navigator.pop(context, true);
                   }),
               new FlatButton(

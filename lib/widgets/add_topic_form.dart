@@ -1,16 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_snap/models/topic.dart';
-import 'package:study_snap/models/topic_model.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:convert';
+import 'package:study_snap/models/subject.dart';
 
-import 'package:study_snap/util/utils.dart';
+typedef String ValidateCallback(
+    BuildContext context, Subject subject, String value);
+typedef void SubmitCallback(
+    BuildContext context, Subject subject, String title, String description);
 
 class AddTopicForm extends StatefulWidget {
+  final Subject subject;
+  final ValidateCallback validate;
+  final SubmitCallback handleSubmitted;
+
+  AddTopicForm({Key key, this.subject, this.validate, this.handleSubmitted})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return AddTopicFormState();
@@ -40,13 +43,15 @@ class AddTopicFormState extends State<AddTopicForm> {
               border: UnderlineInputBorder(),
               filled: true,
               icon: Icon(Icons.title),
-              hintText: 'What topic you would like to snap?',
+              hintText: 'What would you like to snap?',
               labelText: 'Title *',
             ),
             onSaved: (String value) {
               title = value;
             },
-            validator: _validateTitle,
+            validator: (title) {
+              widget.validate(context,widget.subject, title);
+            },
           ),
           const SizedBox(height: 24.0),
           TextFormField(
@@ -66,7 +71,15 @@ class AddTopicFormState extends State<AddTopicForm> {
           Center(
             child: RaisedButton(
               child: const Text('SUBMIT'),
-              onPressed: _handleSubmitted,
+              onPressed: () {
+                final FormState form = _formKey.currentState;
+                if(!form.validate()) {
+                  _validation = true;
+                } else {
+                  form.save();
+                  widget.handleSubmitted(context, widget.subject, title, description);
+                }
+              },
             ),
           ),
           const SizedBox(height: 24.0),
@@ -78,29 +91,5 @@ class AddTopicFormState extends State<AddTopicForm> {
         ],
       ),
     );
-  }
-
-  String _validateTitle(String value) {
-    if (value.isEmpty) return 'Title of the topic can not be empty';
-    TopicModel model = ScopedModel.of<TopicModel>(context);
-    if (model.contains(value)) return 'Topic with this title already exists!';
-    return null;
-  }
-
-  void _handleSubmitted() async {
-    final FormState form = _formKey.currentState;
-    if (!form.validate()) {
-      _validation = true;
-    } else {
-      form.save();
-      TopicModel model = ScopedModel.of<TopicModel>(context);
-      model.add(Topic(title: title, description: description, indexes: []));
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('topics', json.encode(model.toJson()));
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      new Directory(appDocDir.path + '/' + encode(title)).create(recursive: true);
-      new Directory(appDocDir.path + '/' + encode(title) + "_th").create(recursive: true);
-      Navigator.pop(context);
-    }
   }
 }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/screens/topic_details.dart';
 import 'package:study_snap/widgets/grid.dart';
 
 class TopicWidget extends StatelessWidget {
+  final Subject subject;
   final Topic topic;
   final ScrollController controller;
 
-  TopicWidget({Key key, this.topic, this.controller}) : super(key: key);
+  TopicWidget({Key key, this.subject, this.topic, this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,8 @@ class TopicWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TopicDetails(topic: topic),
+                builder: (context) =>
+                    TopicDetails(subject: subject, topic: topic),
               ),
             );
           },

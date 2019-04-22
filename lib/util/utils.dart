@@ -8,10 +8,11 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_snap/models/image.dart';
 import 'package:path/path.dart';
+import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/topic.dart';
-import 'package:study_snap/models/topic_model.dart';
+import 'package:study_snap/models/subject_model.dart';
 
-typedef void UpdateModelCallback(TopicModel model);
+typedef void UpdateModelCallback(SubjectModel model);
 
 String encode(String str) {
   return base64Encode(utf8.encode(str.replaceAll(new RegExp(r"\s+\b|\b\s"), "")));
@@ -40,6 +41,14 @@ Future<File> getOriginalImage(String title, int sequence) async {
   return File(imagePath);
 }
 
+void createDirs(String title) async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  new Directory(appDocDir.path + '/' + encode(title))
+      .create(recursive: true);
+  new Directory(appDocDir.path + '/' + encode(title) + "_th")
+      .create(recursive: true);
+}
+
 void cleanUp(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   new Directory(appDocDir.path + '/' + encode(title))
@@ -50,7 +59,7 @@ void cleanUp(String title) async {
   prefs.remove(title);
 }
 
-void deleteImage(BuildContext context, Topic topic, int index) async {
+void deleteImage(BuildContext context, Subject subject, Topic topic, int index) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   deleteImageByDirectory(
       new Directory(appDocDir.path + '/' + encode(topic.title)),
@@ -59,14 +68,14 @@ void deleteImage(BuildContext context, Topic topic, int index) async {
       new Directory(
           appDocDir.path + '/' + encode(topic.title) + "_th"),
       index);
-  updateModel(context, (TopicModel model) => model.removeIndex(topic, index));
+  updateModel(context, (SubjectModel model) => model.removeIndex(subject, topic, index));
 }
 
 void updateModel(BuildContext context, UpdateModelCallback callback) async {
   final prefs = await SharedPreferences.getInstance();
-  TopicModel model = ScopedModel.of<TopicModel>(context);
+  SubjectModel model = ScopedModel.of<SubjectModel>(context);
   callback(model);
-  prefs.setString('topics', json.encode(model.toJson()));
+  prefs.setString('subjects', json.encode(model.toJson()));
 }
 
 void deleteImageByDirectory(Directory directory, int index) {
@@ -89,9 +98,9 @@ Future<int> getImageCount(Topic topic) async {
   return prefs.getInt(topic.title) ?? 0;
 }
 
-void persistTopicsJson(String json) async {
+void persistSubjectsJson(String json) async {
   final prefs = await SharedPreferences.getInstance();
-  prefs.setString('topics', json);
+  prefs.setString('subjects', json);
 }
 
 void persistTopicCount(Topic topic, int count) async {

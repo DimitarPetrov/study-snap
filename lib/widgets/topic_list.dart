@@ -1,23 +1,27 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:study_snap/models/subject.dart';
+import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
-import 'package:study_snap/models/topic_model.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/topic.dart';
 
 class TopicList extends StatefulWidget {
+  final Subject subject;
+
+  TopicList({Key key, this.subject}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return TopicListState();
+    return _TopicListState(topics: subject.topics);
   }
 }
 
-class TopicListState extends State<TopicList> {
-  List<Topic> _topics;
+class _TopicListState extends State<TopicList> {
+  List<Topic> topics;
   ScrollController _gridController;
+
+  _TopicListState({this.topics});
 
   @override
   void initState() {
@@ -27,32 +31,30 @@ class TopicListState extends State<TopicList> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<TopicModel>(
-      builder: (context, child, topics) {
-        _topics = topics.topics;
-        return ReorderableListView(
-            onReorder: _onReorder,
-            scrollDirection: Axis.horizontal,
-            children: _topics
-                .map((topic) => Dismissible(
-                      key: Key(topic.title),
-                      direction: DismissDirection.up,
-                      confirmDismiss: (direction) {
-                        _showDialog(context, topic, topics);
-                      },
-                      background: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          color: Colors.red,
-                        ),
+    return ScopedModelDescendant<SubjectModel>(
+      builder: (context, child, model) => ReorderableListView(
+          onReorder: _onReorder,
+          scrollDirection: Axis.horizontal,
+          children: topics
+              .map((topic) => Dismissible(
+                    key: Key(topic.title),
+                    direction: DismissDirection.up,
+                    confirmDismiss: (direction) {
+                      _showDialog(topic);
+                    },
+                    background: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        color: Colors.red,
                       ),
-                      child: TopicWidget(
-                        topic: topic,
-                        controller: _gridController,
-                      ),
-                    ))
-                .toList());
-      },
+                    ),
+                    child: TopicWidget(
+                      subject: widget.subject,
+                      topic: topic,
+                      controller: _gridController,
+                    ),
+                  ))
+              .toList()),
     );
   }
 
@@ -61,13 +63,16 @@ class TopicListState extends State<TopicList> {
       if (newIndex > oldIndex) {
         newIndex -= 1;
       }
-      final Topic item = _topics.removeAt(oldIndex);
-      _topics.insert(newIndex, item);
+      final Topic item = topics.removeAt(oldIndex);
+      topics.insert(newIndex, item);
     });
-    persistTopicsJson(json.encode(TopicModel(topics: _topics)));
+    updateModel(
+        context,
+        (model) => model
+            .subjects[model.subjects.indexOf(widget.subject)].topics = topics);
   }
 
-  void _showDialog(BuildContext context, Topic topic, TopicModel model) {
+  void _showDialog(Topic topic) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -80,9 +85,8 @@ class TopicListState extends State<TopicList> {
             new FlatButton(
               child: new Text("Yes"),
               onPressed: () async {
-                model.remove(topic);
-                final prefs = await SharedPreferences.getInstance();
-                prefs.setString('topics', json.encode(model.toJson()));
+                updateModel(context,
+                    (model) => model.removeTopic(widget.subject, topic));
                 cleanUp(topic.title);
                 Navigator.pop(context);
               },
