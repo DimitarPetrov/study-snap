@@ -39,11 +39,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: ^0.7.0
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
+
+flutter_icons:
+  image_path: "icons/icon-ios.png"
+  android: false
+  ios: true
+
 flutter:
 
   # The following line ensures that the Material Icons font is
