@@ -50,7 +50,7 @@ class AddTopicFormState extends State<AddTopicForm> {
               title = value;
             },
             validator: (title) {
-              widget.validate(context,widget.subject, title);
+              return widget.validate(context,widget.subject, title);
             },
           ),
           const SizedBox(height: 24.0),

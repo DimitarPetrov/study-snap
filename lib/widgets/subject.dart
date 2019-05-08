@@ -9,27 +9,20 @@ class SubjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        InkWell(
-          child: ListTile(
-            title: Text(subject.title),
-            subtitle: Text(subject.description),
-            trailing: Icon(Icons.arrow_forward_ios),
+    return ListTile(
+      title: Text(subject.title),
+      subtitle: Text(subject.description),
+      trailing: Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SubjectDetails(
+                  subject: subject,
+                ),
           ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SubjectDetails(
-                      subject: subject,
-                    ),
-              ),
-            );
-          },
-        ),
-        Divider(),
-      ],
+        );
+      },
     );
   }
 }

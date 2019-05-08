@@ -85,7 +85,7 @@ class TopicDetails extends StatelessWidget {
     File thumbnail = await generateThumbnail(image.path);
     thumbnail.copy(thumbnailPath);
 
-    updateModel(context, (model) => model.addIndex(subject, topic, count));
+    await updateModel(context, (model) => model.addIndex(subject, topic, count));
 
     persistTopicCount(topic, ++count);
   }

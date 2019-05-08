@@ -34,7 +34,7 @@ class _SubjectListState extends State<SubjectList> {
           children: subjects
               .map((subject) => Dismissible(
                     key: Key(subject.title),
-                    direction: DismissDirection.vertical,
+                    direction: DismissDirection.horizontal,
                     confirmDismiss: (direction) {
                       _showDialog(context, subject);
                     },

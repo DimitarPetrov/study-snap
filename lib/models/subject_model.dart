@@ -15,8 +15,6 @@ class SubjectModel extends Model {
 
   SubjectModel({this.subjects});
 
-  UnmodifiableListView<Subject> get topicsView => UnmodifiableListView(subjects);
-
   void add(Subject subject) {
     subjects.add(subject);
     notifyListeners();
