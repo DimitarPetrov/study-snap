@@ -93,7 +93,7 @@ class HomeState extends State<Home> {
 
   Future showSearchPage(
       BuildContext context, SearchTitleDelegate searchDelegate) async {
-    final String selected = await showSearch<String>(
+    await showSearch<String>(
       context: context,
       delegate: searchDelegate,
     );

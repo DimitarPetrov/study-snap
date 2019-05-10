@@ -8,7 +8,7 @@ typedef void OnSelectCallback(String query);
 
 class SearchTitleDelegate extends SearchDelegate<String> {
   final List<String> words;
-  final  OnSelectCallback onSelectCallback;
+  final OnSelectCallback onSelectCallback;
 
   SearchTitleDelegate({this.onSelectCallback, this.words});
 
@@ -29,13 +29,23 @@ class SearchTitleDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    final Iterable<String> suggestions = words
+        .where((word) => word.toLowerCase() == query.toLowerCase());
+
+    return _WordSuggestionList(
+      query: this.query,
+      suggestions: suggestions.toList(),
+      onSelected: (String suggestion) {
+        this.query = suggestion;
+        onSelectCallback(query);
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final Iterable<String> suggestions =
-        words.where((word) => word.startsWith(query));
+    final Iterable<String> suggestions = words
+        .where((word) => word.toLowerCase().startsWith(query.toLowerCase()));
 
     return _WordSuggestionList(
       query: this.query,
