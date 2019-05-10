@@ -74,7 +74,7 @@ class AddTopicFormState extends State<AddTopicForm> {
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               onPressed: () {

@@ -49,6 +49,15 @@ class SubjectModel extends Model {
     subjects.sort((a,b) => reverse ? b.title.compareTo(a.title) : a.title.compareTo(b.title));
   }
 
+  Subject getByTitle(String title) {
+    for(Subject subject in subjects) {
+      if(subject.title == title) {
+        return subject;
+      }
+    }
+    return null;
+  }
+
   bool contains(String title) {
     for(Subject subject in subjects) {
       if(subject.title == title) {
