@@ -101,7 +101,7 @@ class SubjectDetailsState extends State<SubjectDetails> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Add Topic",
-        child: Icon(Icons.note_add),
+        child: Icon(Icons.library_add),
         onPressed: () {
           Navigator.push(
             context,
