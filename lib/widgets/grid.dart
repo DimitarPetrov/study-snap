@@ -45,17 +45,21 @@ class GridState extends State<Grid> {
     if (widget.stream != null) {
       widget.stream.listen((event) {
         if (event == Event.DELETE) {
-          selecting
-              ? _onDelete()
-              : setState(() {
-                  selecting = !selecting;
-                });
+          if (selecting) {
+            if (selected.isNotEmpty) _onDelete();
+          } else {
+            setState(() {
+              selecting = !selecting;
+            });
+          }
         } else if (event == Event.SHARE) {
-          selecting
-              ? _onShare()
-              : setState(() {
-                  selecting = !selecting;
-                });
+          if (selecting) {
+            if (selected.isNotEmpty) _onShare();
+          } else {
+            setState(() {
+              selecting = !selecting;
+            });
+          }
         } else if (event == Event.SELECTING) {
           setState(() {
             selecting = !selecting;
