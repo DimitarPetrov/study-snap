@@ -115,6 +115,11 @@ void renameDirs(String oldTitle, String newTitle) async {
 
   new Directory(mainDir).renameSync(newMainDir);
   new Directory(thDir).renameSync(newThDir);
+
+  final prefs = await SharedPreferences.getInstance();
+  int count = prefs.getInt(oldTitle);
+  prefs.remove(oldTitle);
+  prefs.setInt(newTitle, count);
 }
 
 void persistSubjectsJson(String json) async {
