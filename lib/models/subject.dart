@@ -28,6 +28,10 @@ class Subject {
     topics.remove(topic);
   }
 
+  void sort(bool reverse) {
+    topics.sort((a,b) => reverse ? b.title.compareTo(a.title) : a.title.compareTo(b.title));
+  }
+
   bool contains(String title) {
     for(Topic topic in topics) {
       if(topic.title == title) {

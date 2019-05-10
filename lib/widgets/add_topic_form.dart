@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_snap/models/subject.dart';
 
@@ -40,25 +41,23 @@ class AddTopicFormState extends State<AddTopicForm> {
           TextFormField(
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              filled: true,
+              border: OutlineInputBorder(),
               icon: Icon(Icons.title),
               hintText: 'What would you like to snap?',
-              labelText: 'Title *',
+              labelText: 'Title',
             ),
             onSaved: (String value) {
               title = value;
             },
             validator: (title) {
-              return widget.validate(context,widget.subject, title);
+              return widget.validate(context, widget.subject, title);
             },
           ),
           const SizedBox(height: 24.0),
           TextFormField(
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              filled: true,
+              border: OutlineInputBorder(),
               icon: Icon(Icons.description),
               hintText: 'Description of snaps.',
               labelText: 'Description',
@@ -69,25 +68,27 @@ class AddTopicFormState extends State<AddTopicForm> {
           ),
           const SizedBox(height: 24.0),
           Center(
-            child: RaisedButton(
-              child: const Text('SUBMIT'),
+            child: CupertinoButton(
+              color: Theme.of(context).accentColor,
+              child: Text(
+                'Submit',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               onPressed: () {
                 final FormState form = _formKey.currentState;
-                if(!form.validate()) {
+                if (!form.validate()) {
                   _validation = true;
                 } else {
                   form.save();
-                  widget.handleSubmitted(context, widget.subject, title, description);
+                  widget.handleSubmitted(
+                      context, widget.subject, title, description);
                 }
               },
             ),
           ),
-          const SizedBox(height: 24.0),
-          Text(
-            '* indicates required field',
-            style: Theme.of(context).textTheme.caption,
-          ),
-          const SizedBox(height: 24.0),
         ],
       ),
     );

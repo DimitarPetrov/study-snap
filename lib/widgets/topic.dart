@@ -20,6 +20,7 @@ class TopicWidget extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
       child: Card(
+        elevation: 4,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30))),
         child: InkWell(
@@ -36,18 +37,32 @@ class TopicWidget extends StatelessWidget {
           child: Container(
             child: Column(
               children: <Widget>[
-                ListTile(
-                  title: Text(
-                    topic.title,
-                    style: Theme.of(context).textTheme.body1,
-                  ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.only(top: 7.5),
-                    child: Text(
-                      topic.description,
-                      style: Theme.of(context).textTheme.overline,
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 15,
                     ),
-                  ),
+                    Icon(
+                      Icons.collections,
+                      size: 30,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: Text(
+                          topic.title,
+                          style: Theme.of(context).textTheme.subtitle,
+                        ),
+                        subtitle: Padding(
+                          padding: EdgeInsets.only(top: 7.5),
+                          child: Text(
+                            topic.description,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Divider(),
                 Expanded(

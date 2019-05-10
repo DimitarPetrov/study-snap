@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
@@ -8,10 +9,9 @@ import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/subject.dart';
 
 class SubjectList extends StatefulWidget {
-
   final List<Subject> subjects;
 
-  SubjectList({Key key, this.subjects}) : super(key:key);
+  SubjectList({Key key, this.subjects}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,35 +20,40 @@ class SubjectList extends StatefulWidget {
 }
 
 class _SubjectListState extends State<SubjectList> {
-
   List<Subject> subjects;
 
   _SubjectListState({this.subjects});
 
   @override
   Widget build(BuildContext context) {
-        return ReorderableListView(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          onReorder: _onReorder,
-          scrollDirection: Axis.vertical,
-          children: subjects
-              .map((subject) => Dismissible(
-                    key: Key(subject.title),
-                    direction: DismissDirection.horizontal,
-                    confirmDismiss: (direction) {
-                      _showDialog(context, subject);
-                    },
-                    background: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                      ),
+    return CupertinoScrollbar(
+      child: ReorderableListView(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        onReorder: _onReorder,
+        scrollDirection: Axis.vertical,
+        children: subjects
+            .map((subject) => Dismissible(
+                  key: Key(subject.title),
+                  direction: DismissDirection.horizontal,
+                  confirmDismiss: (direction) {
+                    _showDialog(context, subject);
+                  },
+                  background: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
                     ),
-                    child: SubjectWidget(
-                      subject: subject,
+                    child: ListTile(
+                      leading: Icon(Icons.delete),
+                      trailing: Icon(Icons.delete),
                     ),
-                  ))
-              .toList(),
-        );
+                  ),
+                  child: SubjectWidget(
+                    subject: subject,
+                  ),
+                ))
+            .toList(),
+      ),
+    );
   }
 
   void _onReorder(int oldIndex, int newIndex) {

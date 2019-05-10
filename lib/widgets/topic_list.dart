@@ -47,6 +47,13 @@ class _TopicListState extends State<TopicList> {
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         color: Colors.red,
                       ),
+                      child: Align(
+                        alignment: FractionalOffset(0.5, 0.97),
+                        child: Icon(
+                          Icons.delete,
+                          size: 35,
+                        ),
+                      ),
                     ),
                     child: TopicWidget(
                       subject: widget.subject,

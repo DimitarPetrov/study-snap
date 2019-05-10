@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/screens/subject_details.dart';
@@ -10,13 +11,20 @@ class SubjectWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(subject.title),
+      leading: Icon(
+        Icons.subject,
+        color: Theme.of(context).accentColor,
+      ),
+      title: Text(subject.title, style: Theme.of(context).textTheme.subtitle,),
       subtitle: Text(subject.description),
-      trailing: Icon(Icons.arrow_forward_ios),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: Theme.of(context).accentColor,
+      ),
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) => SubjectDetails(
                   subject: subject,
                 ),

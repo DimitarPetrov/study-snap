@@ -6,6 +6,7 @@ import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_snap/util/utils.dart';
+import 'package:study_snap/widgets/bottom_bar.dart';
 import 'package:study_snap/widgets/grid.dart';
 import 'package:study_snap/widgets/dialog.dart';
 
@@ -29,11 +30,14 @@ class TopicDetails extends StatelessWidget {
             ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        tooltip: "Add Photo",
+        child: Icon(Icons.add_a_photo),
         onPressed: () {
           _showImagePickingDialog(context);
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      bottomNavigationBar: BottomBar(),
     );
   }
 
@@ -85,7 +89,8 @@ class TopicDetails extends StatelessWidget {
     File thumbnail = await generateThumbnail(image.path);
     thumbnail.copy(thumbnailPath);
 
-    await updateModel(context, (model) => model.addIndex(subject, topic, count));
+    await updateModel(
+        context, (model) => model.addIndex(subject, topic, count));
 
     persistTopicCount(topic, ++count);
   }

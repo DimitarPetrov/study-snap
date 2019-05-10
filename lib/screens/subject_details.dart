@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/models/subject.dart';
@@ -5,19 +6,41 @@ import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/screens/add_topic.dart';
 import 'package:study_snap/util/utils.dart';
+import 'package:study_snap/widgets/bottom_bar.dart';
 import 'package:study_snap/widgets/topic_list.dart';
 
-class SubjectDetails extends StatelessWidget {
+class SubjectDetails extends StatefulWidget {
   final Subject subject;
 
   SubjectDetails({Key key, this.subject}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return SubjectDetailsState();
+  }
+}
+
+class SubjectDetailsState extends State<SubjectDetails> {
+  bool _reverse = false;
 
   @override
   Widget build(BuildContext context) {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(
-        title: Text(subject.title),
+        title: Text(widget.subject.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.sort_by_alpha),
+            tooltip: 'Sort',
+            onPressed: () {
+              setState(() {
+                _reverse = !_reverse;
+                widget.subject.sort(_reverse);
+              });
+            },
+          )
+        ],
       ),
       body: Align(
         alignment: Alignment.bottomCenter,
@@ -28,24 +51,26 @@ class SubjectDetails extends StatelessWidget {
                 : const SizedBox(),
             Expanded(
               child: TopicList(
-                subject: subject,
+                subject: widget.subject,
               ),
             ),
             (orientation == Orientation.portrait)
-                ? const SizedBox(height: 125)
+                ? const SizedBox(height: 75)
                 : const SizedBox(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        tooltip: "Add Topic",
+        child: Icon(Icons.note_add),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
+              fullscreenDialog: true,
               builder: (context) => AddTopicScreen(
                     title: "Add Topic",
-                    subject: subject,
+                    subject: widget.subject,
                     validate: _validateTitle,
                     handleSubmitted: _handleSubmitted,
                   ),
@@ -53,6 +78,8 @@ class SubjectDetails extends StatelessWidget {
           );
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      bottomNavigationBar: BottomBar(),
     );
   }
 
@@ -68,8 +95,8 @@ class SubjectDetails extends StatelessWidget {
       String description) async {
     updateModel(
         context,
-        (model) => model.addTopic(
-            subject, new Topic(title: title, description: description, indexes: [])));
+        (model) => model.addTopic(subject,
+            new Topic(title: title, description: description, indexes: [])));
     createDirs(title);
     Navigator.pop(context);
   }
