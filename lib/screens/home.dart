@@ -4,6 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/screens/add_topic.dart';
+import 'package:study_snap/screens/subject_details.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/bottom_bar.dart';
 import 'package:study_snap/widgets/search_delegate.dart';
@@ -29,12 +30,11 @@ class HomeState extends State<Home> {
         title: Text("Study Snap"),
         actions: <Widget>[
           IconButton(
-            tooltip: 'Search',
-            icon: const Icon(Icons.search),
-            onPressed: () async {
-              showSearchPage(context, _searchDelegate);
-            }
-          ),
+              tooltip: 'Search',
+              icon: const Icon(Icons.search),
+              onPressed: () async {
+                showSearchPage(context, _searchDelegate);
+              }),
           IconButton(
             icon: Icon(Icons.sort_by_alpha),
             tooltip: 'Sort',
@@ -51,7 +51,8 @@ class HomeState extends State<Home> {
         builder: (context, child, subjects) {
           _subjects = subjects;
           _titles = _subjects.subjects.map((s) => s.title).toList();
-          _searchDelegate = SearchTitleDelegate(_titles);
+          _searchDelegate = SearchTitleDelegate(
+              words: _titles, onSelectCallback: _onSelectCallback);
           return SubjectList(subjects: subjects.subjects);
         },
       ),
@@ -77,19 +78,25 @@ class HomeState extends State<Home> {
     );
   }
 
-  Future showSearchPage(BuildContext context, SearchTitleDelegate searchDelegate) async {
+  void _onSelectCallback(String query) async {
+    SubjectModel model = ScopedModel.of<SubjectModel>(context);
+    await Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => SubjectDetails(
+              subject: model.getByTitle(query),
+            ),
+      ),
+    );
+    Navigator.pop(context);
+  }
+
+  Future showSearchPage(
+      BuildContext context, SearchTitleDelegate searchDelegate) async {
     final String selected = await showSearch<String>(
       context: context,
       delegate: searchDelegate,
     );
-
-    if (selected != null) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Your Word Choice: $selected'),
-        ),
-      );
-    }
   }
 
   String _validateTitle(BuildContext context, Subject subject, String value) {

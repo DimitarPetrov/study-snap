@@ -5,8 +5,10 @@ import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/screens/add_topic.dart';
+import 'package:study_snap/screens/topic_details.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/bottom_bar.dart';
+import 'package:study_snap/widgets/search_delegate.dart';
 import 'package:study_snap/widgets/topic_list.dart';
 
 class SubjectDetails extends StatefulWidget {
@@ -22,6 +24,14 @@ class SubjectDetails extends StatefulWidget {
 
 class SubjectDetailsState extends State<SubjectDetails> {
   bool _reverse = false;
+  SearchTitleDelegate _searchDelegate;
+
+  @override
+  void initState() {
+    List<String> titles = widget.subject.topics.map((t) => t.title).toList();
+    _searchDelegate = SearchTitleDelegate(words: titles, onSelectCallback: _onSelectCallback);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +40,12 @@ class SubjectDetailsState extends State<SubjectDetails> {
       appBar: AppBar(
         title: Text(widget.subject.title),
         actions: <Widget>[
+          IconButton(
+              tooltip: 'Search',
+              icon: const Icon(Icons.search),
+              onPressed: () async {
+                showSearchPage(context, _searchDelegate);
+              }),
           IconButton(
             icon: Icon(Icons.sort_by_alpha),
             tooltip: 'Sort',
@@ -80,6 +96,25 @@ class SubjectDetailsState extends State<SubjectDetails> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BottomBar(),
+    );
+  }
+  
+  void _onSelectCallback(String query) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            TopicDetails(subject: widget.subject, topic: widget.subject.getByTitle(query)),
+      ),
+    );
+    Navigator.pop(context);
+  }
+
+  Future showSearchPage(
+      BuildContext context, SearchTitleDelegate searchDelegate) async {
+    final String selected = await showSearch<String>(
+      context: context,
+      delegate: searchDelegate,
     );
   }
 

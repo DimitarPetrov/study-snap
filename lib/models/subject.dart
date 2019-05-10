@@ -41,6 +41,15 @@ class Subject {
     return false;
   }
 
+  Topic getByTitle(String title) {
+    for(Topic topic in topics) {
+      if(topic.title == title) {
+        return topic;
+      }
+    }
+    return null;
+  }
+
 
   factory Subject.fromJson(Map<String, dynamic> json) => _$SubjectFromJson(json);
 

@@ -4,10 +4,13 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/screens/subject_details.dart';
 
-class SearchTitleDelegate extends SearchDelegate<String> {
-  final List<String> _words;
+typedef void OnSelectCallback(String query);
 
-  SearchTitleDelegate(List<String> words) : _words = words;
+class SearchTitleDelegate extends SearchDelegate<String> {
+  final List<String> words;
+  final  OnSelectCallback onSelectCallback;
+
+  SearchTitleDelegate({this.onSelectCallback, this.words});
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -32,22 +35,14 @@ class SearchTitleDelegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final Iterable<String> suggestions =
-        _words.where((word) => word.startsWith(query));
+        words.where((word) => word.startsWith(query));
 
     return _WordSuggestionList(
       query: this.query,
       suggestions: suggestions.toList(),
       onSelected: (String suggestion) {
         this.query = suggestion;
-        SubjectModel model = ScopedModel.of<SubjectModel>(context);
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => SubjectDetails(
-              subject: model.getByTitle(query),
-            ),
-          ),
-        );
+        onSelectCallback(query);
       },
     );
   }
