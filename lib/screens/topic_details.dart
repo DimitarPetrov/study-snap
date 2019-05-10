@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:study_snap/screens/add_topic.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/bottom_bar.dart';
 import 'package:study_snap/widgets/grid.dart';
@@ -21,6 +23,26 @@ class TopicDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(topic.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            tooltip: "Edit Topic",
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => AddTopicScreen(
+                    title: "Edit Topic",
+                    subject: subject,
+                    validate: _validateEdit,
+                    handleSubmitted: _handleEdit,
+                  ),
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: ScopedModelDescendant<SubjectModel>(
         builder: (context, child, model) => Grid(
@@ -118,4 +140,29 @@ class TopicDetails extends StatelessWidget {
           );
         });
   }
+
+  String _validateEdit(BuildContext context, Subject subject, String value) {
+    SubjectModel model = ScopedModel.of<SubjectModel>(context);
+    if (model.subjects[model.subjects.indexOf(subject)].contains(value))
+      return 'Topic with this title already exists!';
+    return null;
+  }
+
+  void _handleEdit(BuildContext context, Subject subject, String title,
+      String description) async {
+    updateModel(context, (model) {
+      Subject s = model.subjects[model.subjects.indexOf(subject)];
+      Topic t = s.topics[s.topics.indexOf(topic)];
+      if (title.isNotEmpty) {
+        String oldTitle = t.title;
+        t.title = title;
+        renameDirs(oldTitle, title);
+      }
+      if (description.isNotEmpty) {
+        t.description = description;
+      }
+    });
+    Navigator.pop(context);
+  }
+
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -43,6 +45,7 @@ class HomeState extends State<Home> {
                 _reverse = !_reverse;
                 _subjects.sort(_reverse);
               });
+              updateModel(context, (model){});
             },
           ),
         ],

@@ -84,18 +84,37 @@ void deleteImageByDirectory(Directory directory, int index) {
 }
 
 Future<String> getMainDirectory(Topic topic) async {
+  return getMainDirectoryByTitle(topic.title);
+}
+
+Future<String> getMainDirectoryByTitle(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  return appDocDir.path + '/' + encode(topic.title);
+  return appDocDir.path + '/' + encode(title);
 }
 
 Future<String> getThumbnailDirectory(Topic topic) async {
+  return getThumbnailDirectoryByTitle(topic.title);
+}
+
+Future<String> getThumbnailDirectoryByTitle(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  return appDocDir.path + '/' + encode(topic.title) + "_th";
+  return appDocDir.path + '/' + encode(title) + "_th";
 }
 
 Future<int> getImageCount(Topic topic) async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getInt(topic.title) ?? 0;
+}
+
+void renameDirs(String oldTitle, String newTitle) async {
+  String mainDir = await getMainDirectoryByTitle(oldTitle);
+  String thDir = await getThumbnailDirectoryByTitle(oldTitle);
+
+  String newMainDir = await getMainDirectoryByTitle(newTitle);
+  String newThDir = await getThumbnailDirectoryByTitle(newTitle);
+
+  new Directory(mainDir).renameSync(newMainDir);
+  new Directory(thDir).renameSync(newThDir);
 }
 
 void persistSubjectsJson(String json) async {

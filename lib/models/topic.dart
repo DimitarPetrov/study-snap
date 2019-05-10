@@ -5,8 +5,8 @@ part 'topic.g.dart';
 @JsonSerializable()
 class Topic {
 
-  final String title;
-  final String description;
+  String title;
+  String description;
   List<int> indexes;
 
   Topic({this.title, this.description, this.indexes});

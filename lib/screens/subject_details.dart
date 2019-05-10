@@ -29,7 +29,8 @@ class SubjectDetailsState extends State<SubjectDetails> {
   @override
   void initState() {
     List<String> titles = widget.subject.topics.map((t) => t.title).toList();
-    _searchDelegate = SearchTitleDelegate(words: titles, onSelectCallback: _onSelectCallback);
+    _searchDelegate =
+        SearchTitleDelegate(words: titles, onSelectCallback: _onSelectCallback);
     super.initState();
   }
 
@@ -47,12 +48,34 @@ class SubjectDetailsState extends State<SubjectDetails> {
                 showSearchPage(context, _searchDelegate);
               }),
           IconButton(
+            icon: Icon(Icons.edit),
+            tooltip: 'Edit',
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => AddTopicScreen(
+                        title: "Edit Subject",
+                        subject: widget.subject,
+                        validate: _validateEdit,
+                        handleSubmitted: _handleEdit,
+                      ),
+                ),
+              );
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.sort_by_alpha),
             tooltip: 'Sort',
             onPressed: () {
               setState(() {
                 _reverse = !_reverse;
                 widget.subject.sort(_reverse);
+              });
+              updateModel(context, (model) {
+                model.subjects[model.subjects.indexOf(widget.subject)]
+                    .sort(_reverse);
               });
             },
           )
@@ -98,13 +121,13 @@ class SubjectDetailsState extends State<SubjectDetails> {
       bottomNavigationBar: BottomBar(),
     );
   }
-  
+
   void _onSelectCallback(String query) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            TopicDetails(subject: widget.subject, topic: widget.subject.getByTitle(query)),
+        builder: (context) => TopicDetails(
+            subject: widget.subject, topic: widget.subject.getByTitle(query)),
       ),
     );
     Navigator.pop(context);
@@ -116,6 +139,26 @@ class SubjectDetailsState extends State<SubjectDetails> {
       context: context,
       delegate: searchDelegate,
     );
+  }
+
+  String _validateEdit(BuildContext context, Subject subject, String value) {
+    SubjectModel model = ScopedModel.of<SubjectModel>(context);
+    if (model.contains(value)) return 'Subject with this title already exists!';
+    return null;
+  }
+
+  void _handleEdit(BuildContext context, Subject subject, String title,
+      String description) async {
+    updateModel(context, (model) {
+      Subject s = model.subjects[model.subjects.indexOf(subject)];
+      if (title.isNotEmpty) {
+        s.title = title;
+      }
+      if (description.isNotEmpty) {
+        s.description = description;
+      }
+    });
+    Navigator.pop(context);
   }
 
   String _validateTitle(BuildContext context, Subject subject, String value) {
