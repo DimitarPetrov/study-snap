@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,23 +8,78 @@ import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_snap/screens/add_topic.dart';
+import 'package:study_snap/util/event.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:study_snap/widgets/bottom_bar.dart';
 import 'package:study_snap/widgets/grid.dart';
 import 'package:study_snap/widgets/dialog.dart';
 
-class TopicDetails extends StatelessWidget {
+class TopicDetails extends StatefulWidget {
   final Subject subject;
   final Topic topic;
 
   TopicDetails({Key key, this.subject, this.topic}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() {
+    return TopicDetailsState();
+  }
+}
+
+class TopicDetailsState extends State<TopicDetails> {
+  bool selecting = false;
+  StreamController<Event> _controller = StreamController<Event>();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(topic.title),
+        title: Text(widget.topic.title),
+        leading: selecting
+            ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  setState(() {
+                    selecting = !selecting;
+                    _controller.add(Event.SELECTING);
+                  });
+                },
+              )
+            : IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            tooltip: "Delete",
+            onPressed: () {
+              setState(() {
+                if (!selecting) {
+                  setState(() {
+                    selecting = !selecting;
+                  });
+                }
+                _controller.add(Event.DELETE);
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.share),
+            tooltip: "Share",
+            onPressed: () {
+              setState(() {
+                if (!selecting) {
+                  setState(() {
+                    selecting = !selecting;
+                  });
+                }
+                _controller.add(Event.SHARE);
+              });
+            },
+          ),
           IconButton(
             icon: Icon(Icons.edit),
             tooltip: "Edit Topic",
@@ -33,11 +89,11 @@ class TopicDetails extends StatelessWidget {
                 CupertinoPageRoute(
                   fullscreenDialog: true,
                   builder: (context) => AddTopicScreen(
-                    title: "Edit Topic",
-                    subject: subject,
-                    validate: _validateEdit,
-                    handleSubmitted: _handleEdit,
-                  ),
+                        title: "Edit Topic",
+                        subject: widget.subject,
+                        validate: _validateEdit,
+                        handleSubmitted: _handleEdit,
+                      ),
                 ),
               );
             },
@@ -46,9 +102,13 @@ class TopicDetails extends StatelessWidget {
       ),
       body: ScopedModelDescendant<SubjectModel>(
         builder: (context, child, model) => Grid(
-              topic: topic,
+              topic: widget.topic,
               clickable: true,
               deleteCallback: _showDeleteDialog,
+              stream: _controller.stream,
+              selection: () {setState(() {
+                selecting = !selecting;
+              });}
             ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -99,35 +159,37 @@ class TopicDetails extends StatelessWidget {
   }
 
   void _saveImage(BuildContext context, File image) async {
-    int count = await getImageCount(topic);
+    int count = await getImageCount(widget.topic);
 
-    String mainDir = await getMainDirectory(topic);
+    String mainDir = await getMainDirectory(widget.topic);
     String path = mainDir + '/' + count.toString();
     image.copy(path);
 
-    String thDir = await getThumbnailDirectory(topic);
+    String thDir = await getThumbnailDirectory(widget.topic);
     String thumbnailPath = thDir + '/' + count.toString();
 
     File thumbnail = await generateThumbnail(image.path);
     thumbnail.copy(thumbnailPath);
 
-    await updateModel(
-        context, (model) => model.addIndex(subject, topic, count));
+    await updateModel(context,
+        (model) => model.addIndex(widget.subject, widget.topic, count));
 
-    persistTopicCount(topic, ++count);
+    persistTopicCount(widget.topic, ++count);
   }
 
-  Future _showDeleteDialog(BuildContext context, int index) {
+  Future _showDeleteDialog(BuildContext context, List<int> indexes) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Really delete this image?"),
+            title: new Text("Really delete images?"),
             actions: <Widget>[
               new FlatButton(
                   child: new Text("Yes"),
                   onPressed: () async {
-                    deleteImage(context, subject, topic, index);
+                    for (int index in indexes) {
+                      deleteImage(context, widget.subject, widget.topic, index);
+                    }
                     Navigator.pop(context, true);
                   }),
               new FlatButton(
@@ -152,7 +214,7 @@ class TopicDetails extends StatelessWidget {
       String description) async {
     updateModel(context, (model) {
       Subject s = model.subjects[model.subjects.indexOf(subject)];
-      Topic t = s.topics[s.topics.indexOf(topic)];
+      Topic t = s.topics[s.topics.indexOf(widget.topic)];
       if (title.isNotEmpty) {
         String oldTitle = t.title;
         t.title = title;
@@ -164,5 +226,4 @@ class TopicDetails extends StatelessWidget {
     });
     Navigator.pop(context);
   }
-
 }

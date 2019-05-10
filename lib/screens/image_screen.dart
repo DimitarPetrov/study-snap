@@ -6,7 +6,7 @@ import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:photo_view/photo_view.dart';
 
-typedef Future DeleteCallback(BuildContext context, int index);
+typedef Future DeleteCallback(BuildContext context, List<int> indexes);
 
 class ImageScreen extends StatefulWidget {
   final Topic topic;
@@ -44,7 +44,7 @@ class ImageScreenState extends State<ImageScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              widget.deleteCallback(context, widget.topic.indexes[index]).then((val) {
+              widget.deleteCallback(context, List(widget.topic.indexes[index])).then((val) {
                 if(val) {
                   Navigator.pop(context);
                 }
