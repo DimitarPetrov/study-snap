@@ -1,4 +1,3 @@
-# Study Snap  
 ![Logo](icons/icon-ios.png)
 ## Overview
 
@@ -9,4 +8,4 @@ or directly take a photo in one of them.
 
 ### Demo
 
-![demo](demo/study_snap_demo.gif)
+![demo](demo/study_snap_demo2.gif)
