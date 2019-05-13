@@ -1,8 +1,8 @@
-import 'dart:convert';
-
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_snap/ads/ads_factory.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/screens/add_topic.dart';
@@ -24,6 +24,20 @@ class HomeState extends State<Home> {
   SubjectModel _subjects;
   List<String> _titles;
   SearchTitleDelegate _searchDelegate;
+  BannerAd _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    _bannerAd = BannerAdsFactory.createBannerAd()..load()..show();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/topic.dart';

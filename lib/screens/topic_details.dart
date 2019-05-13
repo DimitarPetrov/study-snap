@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_snap/ads/ads_factory.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
@@ -29,6 +31,19 @@ class TopicDetails extends StatefulWidget {
 class TopicDetailsState extends State<TopicDetails> {
   bool selecting = false;
   StreamController<Event> _controller = StreamController<Event>();
+  BannerAd _bannerAd;
+
+  @override
+  void initState() {
+    _bannerAd = BannerAdsFactory.createBannerAd()..load()..show();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

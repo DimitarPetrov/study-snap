@@ -31,6 +31,7 @@ dependencies:
   esys_flutter_share:
     git: https://github.com/esysberlin/esys-flutter-share
   photo_view: ^0.2.4
+  firebase_admob: ^0.9.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

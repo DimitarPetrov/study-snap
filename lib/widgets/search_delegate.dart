@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:study_snap/models/subject_model.dart';
-import 'package:study_snap/screens/subject_details.dart';
 
 typedef void OnSelectCallback(String query);
 

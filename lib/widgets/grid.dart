@@ -6,7 +6,6 @@ import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/screens/image_screen.dart';
 import 'package:study_snap/util/event.dart';
 import 'package:study_snap/util/utils.dart';
-import 'package:study_snap/widgets/dialog.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 
 class Grid extends StatefulWidget {

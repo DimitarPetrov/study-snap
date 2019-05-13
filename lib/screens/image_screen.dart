@@ -44,7 +44,7 @@ class ImageScreenState extends State<ImageScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              widget.deleteCallback(context, List(widget.topic.indexes[index])).then((val) {
+              widget.deleteCallback(context, <int>[widget.topic.indexes[index]]).then((val) {
                 if(val) {
                   Navigator.pop(context);
                 }

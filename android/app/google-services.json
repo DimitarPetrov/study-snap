@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "846239785346",
+    "firebase_url": "https://study-snap-a03e9.firebaseio.com",
+    "project_id": "study-snap-a03e9",
+    "storage_bucket": "study-snap-a03e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846239785346:android:811ce6bc0e5e73d0",
+        "android_client_info": {
+          "package_name": "dnp.study_snap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846239785346-p89vvncqrmj08d0vae2t7b6td7mu7g25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwKkhxQG-jLgVx9wxEuXgM86GYeouXHi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846239785346-p89vvncqrmj08d0vae2t7b6td7mu7g25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-8543805483173927~1931251623"
+    }
+  ],
+  "configuration_version": "1"
+}

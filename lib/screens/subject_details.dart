@@ -1,6 +1,8 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_snap/ads/ads_factory.dart';
 import 'package:study_snap/models/subject.dart';
 import 'package:study_snap/models/subject_model.dart';
 import 'package:study_snap/models/topic.dart';
@@ -25,13 +27,21 @@ class SubjectDetails extends StatefulWidget {
 class SubjectDetailsState extends State<SubjectDetails> {
   bool _reverse = false;
   SearchTitleDelegate _searchDelegate;
+  BannerAd _bannerAd;
 
   @override
   void initState() {
+    _bannerAd = BannerAdsFactory.createBannerAd()..load()..show();
     List<String> titles = widget.subject.topics.map((t) => t.title).toList();
     _searchDelegate =
         SearchTitleDelegate(words: titles, onSelectCallback: _onSelectCallback);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
