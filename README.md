@@ -14,4 +14,4 @@ internal storage.
 
 ### Demo
 
-![demo](demo/study_snap_demo2.gif)
+![demo](demo/study_snap_demo.gif)
