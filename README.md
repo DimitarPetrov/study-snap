@@ -11,6 +11,10 @@ Exactly that is the purpose of **Study Snap**. It is designed for saving photos 
 You can create multiple subjects and in each of them to have as much as you like topics containing a set of photos for the topic. This makes photos not only easier to find but much more efficient to learn as every photo is in its own context. You can also create photos directly in a topic without going to the gallery app or include photo from it.
 When a photo is uploaded to Study Snap it is free to be deleted from gallery, don't worry **Study Snap** keeps a separate copy of it in your internal storage.
 
-### Demo
+## Demo
 
 ![demo](demo/study_snap_demo.gif)
+
+## Download
+
+<a href='https://play.google.com/store/apps/details?id=dnp.study_snap'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170"/></a>
