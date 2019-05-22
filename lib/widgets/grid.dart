@@ -75,7 +75,7 @@ class GridState extends State<Grid> {
       selected.clear();
     }
     return FutureBuilder<List<ImageDTO>>(
-        future: getImages(widget.topic.title),
+        future: getThumbnails(widget.topic.title),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return new Container(
@@ -107,13 +107,15 @@ class GridState extends State<Grid> {
         tag: image.sequence,
         child: selecting ? _selectableImage(image) : image.image,
       ),
-      onTap: () {
+      onTap: () async {
         if (!selecting) {
+          List<File> images = await getImages(widget.topic.title);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ImageScreen(
                     topic: widget.topic,
+                    images: images,
                     index: widget.topic.indexes.indexOf(image.sequence),
                     deleteCallback: widget.deleteCallback,
                   ),

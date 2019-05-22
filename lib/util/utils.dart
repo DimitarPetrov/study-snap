@@ -15,17 +15,18 @@ import 'package:study_snap/models/subject_model.dart';
 typedef void UpdateModelCallback(SubjectModel model);
 
 String encode(String str) {
-  return base64Encode(utf8.encode(str.replaceAll(new RegExp(r"\s+\b|\b\s"), "")));
+  return base64Encode(
+      utf8.encode(str.replaceAll(new RegExp(r"\s+\b|\b\s"), "")));
 }
 
 int extractSequence(String path) {
   return int.parse(basename(path));
 }
 
-Future<List<ImageDTO>> getImages(String title) async {
+Future<List<ImageDTO>> getThumbnails(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  Directory topicHome = new Directory(
-      appDocDir.uri.resolve(encode(title)).path + "_th");
+  Directory topicHome =
+      new Directory(appDocDir.uri.resolve(encode(title)).path + "_th");
   return topicHome
       .list()
       .map((f) =>
@@ -33,42 +34,45 @@ Future<List<ImageDTO>> getImages(String title) async {
       .toList();
 }
 
+Future<List<File>> getImages(String title) async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  Directory topicHome =
+      new Directory(appDocDir.uri.resolve(encode(title)).path);
+  return topicHome.list().map((f) => File(f.path)).toList();
+}
+
 Future<File> getOriginalImage(String title, int sequence) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  String imagePath = appDocDir.uri.resolve(encode(title)).path +
-      "/" +
-      sequence.toString();
+  String imagePath =
+      appDocDir.uri.resolve(encode(title)).path + "/" + sequence.toString();
   return File(imagePath);
 }
 
 void createDirs(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  new Directory(appDocDir.path + '/' + encode(title))
-      .create(recursive: true);
+  new Directory(appDocDir.path + '/' + encode(title)).create(recursive: true);
   new Directory(appDocDir.path + '/' + encode(title) + "_th")
       .create(recursive: true);
 }
 
 void cleanUp(String title) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
-  new Directory(appDocDir.path + '/' + encode(title))
-      .delete(recursive: true);
+  new Directory(appDocDir.path + '/' + encode(title)).delete(recursive: true);
   new Directory(appDocDir.path + '/' + encode(title) + "_th")
       .delete(recursive: true);
   final prefs = await SharedPreferences.getInstance();
   prefs.remove(title);
 }
 
-void deleteImage(BuildContext context, Subject subject, Topic topic, int index) async {
+void deleteImage(
+    BuildContext context, Subject subject, Topic topic, int index) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   deleteImageByDirectory(
-      new Directory(appDocDir.path + '/' + encode(topic.title)),
-      index);
+      new Directory(appDocDir.path + '/' + encode(topic.title)), index);
   deleteImageByDirectory(
-      new Directory(
-          appDocDir.path + '/' + encode(topic.title) + "_th"),
-      index);
-  updateModel(context, (SubjectModel model) => model.removeIndex(subject, topic, index));
+      new Directory(appDocDir.path + '/' + encode(topic.title) + "_th"), index);
+  updateModel(context,
+      (SubjectModel model) => model.removeIndex(subject, topic, index));
 }
 
 void updateModel(BuildContext context, UpdateModelCallback callback) async {

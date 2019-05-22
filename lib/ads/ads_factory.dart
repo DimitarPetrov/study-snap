@@ -6,7 +6,6 @@ class BannerAdsFactory {
     testDevices: <String>["emulator-5554"],
     keywords: <String>['study', 'snap', 'camera', 'photo', 'studying', 'university', 'school', 'education'
     'notes', 'materials'],
-    childDirected: true,
     nonPersonalizedAds: true,
   );
 
