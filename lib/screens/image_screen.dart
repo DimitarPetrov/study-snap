@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/util/utils.dart';
-import 'package:photo_view/photo_view.dart';
 
 typedef Future DeleteCallback(BuildContext context, List<int> indexes);
 
@@ -72,12 +72,13 @@ class ImageScreenState extends State<ImageScreen> {
           builder: (context, index) {
             return PhotoViewGalleryPageOptions(
               imageProvider: FileImage(widget.images[index]),
-              heroTag: basename(widget.images[index].path),
+              heroAttributes: PhotoViewHeroAttributes(
+                  tag: basename(widget.images[index].path)),
             );
           },
           scrollPhysics: const BouncingScrollPhysics(),
           itemCount: widget.images.length,
-          loadingChild: new Container(
+          loadingBuilder: (context, event) => new Container(
               alignment: FractionalOffset.center,
               child: new CircularProgressIndicator()),
           pageController: PageController(initialPage: widget.index),

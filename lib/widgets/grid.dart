@@ -7,6 +7,7 @@ import 'package:study_snap/screens/image_screen.dart';
 import 'package:study_snap/util/event.dart';
 import 'package:study_snap/util/utils.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:drag_and_drop_gridview/devdrag.dart';
 
 class Grid extends StatefulWidget {
   final Topic topic;
@@ -71,6 +72,15 @@ class GridState extends State<Grid> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int _crossAxisCount = 3;
+    double _crossAxisSpacing = 1.5;
+    double _aspectRatio = 1.0;
+
+    var width = (screenWidth - ((_crossAxisCount - 1) * _crossAxisSpacing)) /
+        _crossAxisCount;
+    var height = width / _aspectRatio;
+
     if (!selecting) {
       selected.clear();
     }
@@ -84,66 +94,92 @@ class GridState extends State<Grid> {
                 child: new CircularProgressIndicator());
           }
           snapshot.data.sort((i1, i2) => i1.sequence.compareTo(i2.sequence));
-          return GridView.count(
+          return DragAndDropGridView(
             controller: widget.controller,
-            crossAxisCount: 3,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 1.5,
-            crossAxisSpacing: 1.5,
-            children: snapshot.data.map((ImageDTO image) {
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: _crossAxisCount,
+              childAspectRatio: _aspectRatio,
+              mainAxisSpacing: 1.5,
+              crossAxisSpacing: _crossAxisSpacing,
+            ),
+            onWillAccept: (oldIndex, newIndex) {
+              return true;
+            },
+            onReorder: (oldIndex, newIndex) {
+              print("reorder");
+              print(oldIndex);
+              print(newIndex);
+              // TODO:
+            },
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
               return GridTile(
                 child: widget.clickable
-                    ? _clickableTile(context, image)
-                    : image.image,
+                    ? _clickableTile(context, snapshot.data[index])
+                    : snapshot.data[index].image,
               );
-            }).toList(),
+            },
+            isCustomFeedback: true,
+            feedback: (index) {
+              return Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: snapshot.data[index].image.image,
+                  ),
+                ),
+              );
+            },
           );
         });
   }
 
   Widget _clickableTile(BuildContext context, ImageDTO image) {
-    return InkWell(
-      child: Hero(
-        tag: image.sequence,
-        child: selecting ? _selectableImage(image) : image.image,
-      ),
-      onTap: () async {
-        if (!selecting) {
-          List<File> images = await getImages(widget.topic.title);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ImageScreen(
-                    topic: widget.topic,
-                    images: images,
-                    index: widget.topic.indexes.indexOf(image.sequence),
-                    deleteCallback: widget.deleteCallback,
-                  ),
-            ),
-          );
-        } else {
-          setState(() {
-            if (selected.contains(image.sequence)) {
-              selected.remove(image.sequence);
-            } else {
-              selected.add(image.sequence);
-            }
-          });
-        }
-      },
-      onLongPress: () async {
-        setState(() {
+    return Material(
+      child: InkWell(
+        child: Hero(
+          tag: image.sequence,
+          child: selecting ? _selectableImage(image) : image.image,
+        ),
+        onTap: () async {
           if (!selecting) {
-            selecting = !selecting;
-            widget.selection();
+            List<File> images = await getImages(widget.topic.title);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageScreen(
+                  topic: widget.topic,
+                  images: images,
+                  index: widget.topic.indexes.indexOf(image.sequence),
+                  deleteCallback: widget.deleteCallback,
+                ),
+              ),
+            );
+          } else {
+            setState(() {
+              if (selected.contains(image.sequence)) {
+                selected.remove(image.sequence);
+              } else {
+                selected.add(image.sequence);
+              }
+            });
           }
-        });
-        if (selected.contains(image.sequence)) {
-          selected.remove(image.sequence);
-        } else {
-          selected.add(image.sequence);
-        }
-      },
+        },
+        // onLongPress: () async {
+        //   setState(() {
+        //     if (!selecting) {
+        //       selecting = !selecting;
+        //       widget.selection();
+        //     }
+        //   });
+        //   if (selected.contains(image.sequence)) {
+        //     selected.remove(image.sequence);
+        //   } else {
+        //     selected.add(image.sequence);
+        //   }
+        // },
+      ),
     );
   }
 
