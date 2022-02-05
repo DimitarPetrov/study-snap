@@ -119,6 +119,7 @@ class TopicDetailsState extends State<TopicDetails> {
       ),
       body: ScopedModelDescendant<SubjectModel>(
         builder: (context, child, model) => Grid(
+            subject: widget.subject,
             topic: widget.topic,
             clickable: true,
             deleteCallback: _showDeleteDialog,

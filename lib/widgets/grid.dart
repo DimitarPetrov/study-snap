@@ -9,7 +9,10 @@ import 'package:study_snap/util/utils.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:drag_and_drop_gridview/devdrag.dart';
 
+import '../models/subject.dart';
+
 class Grid extends StatefulWidget {
+  final Subject subject;
   final Topic topic;
   final bool clickable;
   final DeleteCallback deleteCallback;
@@ -25,6 +28,7 @@ class Grid extends StatefulWidget {
     this.controller,
     this.stream,
     this.selection,
+    this.subject,
   }) : super(key: key);
 
   @override
@@ -106,10 +110,20 @@ class GridState extends State<Grid> {
               return true;
             },
             onReorder: (oldIndex, newIndex) {
-              print("reorder");
-              print(oldIndex);
-              print(newIndex);
-              // TODO:
+              print("reorder: " + oldIndex.toString() + " -> " + newIndex.toString());
+              dynamic itemToMove = snapshot.data.removeAt(oldIndex);
+              snapshot.data.insert(newIndex, itemToMove);
+
+              Map<int,int> newOrder = new Map();
+              for (int i = 0; i < snapshot.data.length; ++i) {
+                newOrder[snapshot.data[i].sequence] = i;
+              }
+
+              reorder(widget.topic.title, newOrder).whenComplete(() {
+                updateModel(context, (model) {
+                  model.setIndexes(widget.subject, widget.topic, newOrder.values.toList());
+                });
+              });
             },
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
@@ -145,6 +159,7 @@ class GridState extends State<Grid> {
         onTap: () async {
           if (!selecting) {
             List<File> images = await getImages(widget.topic.title);
+            images.sort((f1,f2) => extractSequence(f1.path).compareTo(extractSequence(f2.path)));
             Navigator.push(
               context,
               MaterialPageRoute(

@@ -13,13 +13,13 @@ class SubjectWidget extends StatelessWidget {
     return ListTile(
       leading: Icon(
         Icons.subject,
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
       ),
-      title: Text(subject.title, style: Theme.of(context).textTheme.subtitle,),
+      title: Text(subject.title, style: Theme.of(context).textTheme.subtitle2,),
       subtitle: Text(subject.description),
       trailing: Icon(
         Icons.arrow_forward_ios,
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       onTap: () {
         Navigator.push(

@@ -20,14 +20,17 @@ dependencies:
   flutter:
     sdk: flutter
   scoped_model: ^1.1.0
-  json_annotation: ^4.0.0
-  build_runner: ^2.1.1
-  json_serializable: ^4.1.3
+  json_annotation: ^3.1.1
+  build_runner: ^1.11.5
+  json_serializable: ^3.5.1
   shared_preferences: ^2.0.6
-  image_picker: ^0.8.3+2
-  path_provider: ^1.1.0
+  image_picker: ^0.8.4+6
+  path_provider: ^2.0.8
   flutter_native_image: ^0.0.6+1
-  esys_flutter_share: ^1.0.2
+  esys_flutter_share:
+    git:
+      url: https://github.com/cihadturhan/esys-flutter-share.git
+      ref: nullsafety+embedding-2
   photo_view: ^0.12.0
   firebase_admob: ^0.11.2
   drag_and_drop_gridview: ^1.0.8

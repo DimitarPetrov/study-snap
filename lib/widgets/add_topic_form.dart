@@ -27,13 +27,11 @@ class AddTopicFormState extends State<AddTopicForm> {
   String title;
   String description;
 
-  bool _validation = false;
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      autovalidate: _validation,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -79,9 +77,7 @@ class AddTopicFormState extends State<AddTopicForm> {
               ),
               onPressed: () {
                 final FormState form = _formKey.currentState;
-                if (!form.validate()) {
-                  _validation = true;
-                } else {
+                if (form.validate()) {
                   form.save();
                   widget.handleSubmitted(
                       context, widget.subject, title, description);

@@ -8,11 +8,14 @@ part of 'subject_model.dart';
 
 SubjectModel _$SubjectModelFromJson(Map<String, dynamic> json) {
   return SubjectModel(
-      subjects: (json['subjects'] as List)
-          ?.map((e) =>
-              e == null ? null : Subject.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+    subjects: (json['subjects'] as List)
+        ?.map((e) =>
+            e == null ? null : Subject.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
 }
 
 Map<String, dynamic> _$SubjectModelToJson(SubjectModel instance) =>
-    <String, dynamic>{'subjects': instance.subjects};
+    <String, dynamic>{
+      'subjects': instance.subjects,
+    };

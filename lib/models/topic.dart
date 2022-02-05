@@ -20,6 +20,10 @@ class Topic {
     indexes.remove(index);
   }
 
+  void setIndexes(List<int> indexes) {
+    this.indexes = indexes;
+  }
+
   factory Topic.fromJson(Map<String, dynamic> json) => _$TopicFromJson(json);
 
   Map<String, dynamic> toJson() => _$TopicToJson(this);

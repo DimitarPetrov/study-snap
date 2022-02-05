@@ -23,6 +23,11 @@ class SubjectModel extends Model {
     notifyListeners();
   }
 
+  void setIndexes(Subject subject, Topic topic, List<int> indexes) {
+    subjects[subjects.indexOf(subject)].setIndexes(topic, indexes);
+    notifyListeners();
+  }
+
   void removeIndex(Subject subject, Topic topic, int index) {
     subjects[subjects.indexOf(subject)].removeIndex(topic, index);
     notifyListeners();
@@ -51,6 +56,15 @@ class SubjectModel extends Model {
     for(Subject subject in subjects) {
       if(subject.title == title) {
         return subject;
+      }
+    }
+    return null;
+  }
+
+  Topic getTopicByTitle(String subjectTitle, topicTitle) {
+    for(Topic topic in getByTitle(subjectTitle).topics) {
+      if(topic.title == topicTitle) {
+        return topic;
       }
     }
     return null;
