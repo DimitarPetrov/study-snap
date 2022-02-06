@@ -107,7 +107,14 @@ class GridState extends State<Grid> {
               crossAxisSpacing: _crossAxisSpacing,
             ),
             onWillAccept: (oldIndex, newIndex) {
-              return true;
+              /* TODO: reorder is disabled due to two problems:
+                  1) When reorder takes place and the model is updated for some reason the grid is not updated until restart -> BUG
+                  2) In current design reordering is not atomic. This means that we first reorder the thumbnails and then the real images.
+                     If somethings fails along the way we have inconsistent state that is impossible to be recovered or detected.
+                     A mitigation for this would be to use SQLLite DB and use transactions.
+                     This will require almost fully rewriting the app which can be considered for v2.
+               */
+              return false;
             },
             onReorder: (oldIndex, newIndex) {
               print("reorder: " + oldIndex.toString() + " -> " + newIndex.toString());
@@ -181,19 +188,19 @@ class GridState extends State<Grid> {
             });
           }
         },
-        // onLongPress: () async {
-        //   setState(() {
-        //     if (!selecting) {
-        //       selecting = !selecting;
-        //       widget.selection();
-        //     }
-        //   });
-        //   if (selected.contains(image.sequence)) {
-        //     selected.remove(image.sequence);
-        //   } else {
-        //     selected.add(image.sequence);
-        //   }
-        // },
+        onLongPress: () async {
+          setState(() {
+            if (!selecting) {
+              selecting = !selecting;
+              widget.selection();
+            }
+          });
+          if (selected.contains(image.sequence)) {
+            selected.remove(image.sequence);
+          } else {
+            selected.add(image.sequence);
+          }
+        },
       ),
     );
   }
