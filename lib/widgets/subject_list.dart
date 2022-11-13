@@ -78,7 +78,7 @@ class _SubjectListState extends State<SubjectList> {
               "this subject (including their images). "
               "If you do not have a separate copy they will be permanently lost!"),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("Yes"),
               onPressed: () async {
                 updateModel(context, (model) => model.remove(subject));
@@ -88,7 +88,7 @@ class _SubjectListState extends State<SubjectList> {
                 Navigator.pop(context);
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("No"),
               onPressed: () {
                 Navigator.pop(context);

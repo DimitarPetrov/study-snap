@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/ads/ads_factory.dart';
 import 'package:study_snap/models/subject.dart';
@@ -35,9 +35,7 @@ class TopicDetailsState extends State<TopicDetails> {
 
   @override
   void initState() {
-    _bannerAd = BannerAdsFactory.createBannerAd()
-      ..load()
-      ..show();
+    _bannerAd = BannerAdsFactory.createBannerAd()..load();
     super.initState();
   }
 
@@ -138,7 +136,7 @@ class TopicDetailsState extends State<TopicDetails> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: BottomBar(),
+      bottomNavigationBar: BottomBar(bannerAd: _bannerAd,),
     );
   }
 
@@ -205,7 +203,7 @@ class TopicDetailsState extends State<TopicDetails> {
           return AlertDialog(
             title: new Text("Really delete images?"),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                   child: new Text("Yes"),
                   onPressed: () async {
                     for (int index in indexes) {
@@ -213,7 +211,7 @@ class TopicDetailsState extends State<TopicDetails> {
                     }
                     Navigator.pop(context, true);
                   }),
-              new FlatButton(
+              new TextButton(
                 child: new Text("No"),
                 onPressed: () {
                   Navigator.pop(context, false);

@@ -32,7 +32,7 @@ dependencies:
       url: https://github.com/cihadturhan/esys-flutter-share.git
       ref: nullsafety+embedding-2
   photo_view: ^0.12.0
-  firebase_admob: ^0.11.2
+  google_mobile_ads: ^2.2.0
   drag_and_drop_gridview: ^1.0.8
 
   # The following adds the Cupertino Icons font to your application.

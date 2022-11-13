@@ -89,7 +89,7 @@ class _TopicListState extends State<TopicList> {
               "Be aware that this will lead to deleteion of all the images associated with "
               "this topic. If you do not have a separate copy they will be permanently lost!"),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("Yes"),
               onPressed: () async {
                 updateModel(context,
@@ -98,7 +98,7 @@ class _TopicListState extends State<TopicList> {
                 Navigator.pop(context);
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("No"),
               onPressed: () {
                 Navigator.pop(context);
