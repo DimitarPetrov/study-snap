@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_snap/ads/ads_factory.dart';
 import 'package:study_snap/models/subject.dart';
@@ -35,7 +35,7 @@ class TopicDetailsState extends State<TopicDetails> {
 
   @override
   void initState() {
-    _bannerAd = BannerAdsFactory.createBannerAd()..load()..show();
+    _bannerAd = BannerAdsFactory.createBannerAd()..load();
     super.initState();
   }
 
@@ -104,11 +104,11 @@ class TopicDetailsState extends State<TopicDetails> {
                 CupertinoPageRoute(
                   fullscreenDialog: true,
                   builder: (context) => AddTopicScreen(
-                        title: "Edit Topic",
-                        subject: widget.subject,
-                        validate: _validateEdit,
-                        handleSubmitted: _handleEdit,
-                      ),
+                    title: "Edit Topic",
+                    subject: widget.subject,
+                    validate: _validateEdit,
+                    handleSubmitted: _handleEdit,
+                  ),
                 ),
               );
             },
@@ -117,14 +117,16 @@ class TopicDetailsState extends State<TopicDetails> {
       ),
       body: ScopedModelDescendant<SubjectModel>(
         builder: (context, child, model) => Grid(
-              topic: widget.topic,
-              clickable: true,
-              deleteCallback: _showDeleteDialog,
-              stream: _controller.stream,
-              selection: () {setState(() {
+            subject: widget.subject,
+            topic: widget.topic,
+            clickable: true,
+            deleteCallback: _showDeleteDialog,
+            stream: _controller.stream,
+            selection: () {
+              setState(() {
                 selecting = !selecting;
-              });}
-            ),
+              });
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Add Photo",
@@ -134,7 +136,7 @@ class TopicDetailsState extends State<TopicDetails> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: BottomBar(),
+      bottomNavigationBar: BottomBar(bannerAd: _bannerAd,),
     );
   }
 
@@ -156,29 +158,31 @@ class TopicDetailsState extends State<TopicDetails> {
   }
 
   void _openCamera(BuildContext context) async {
-    File image = await ImagePicker.pickImage(
+    final ImagePicker _picker = ImagePicker();
+    XFile image = await _picker.pickImage(
       source: ImageSource.camera,
     );
     if (image != null) {
-      _saveImage(context, image);
+      await _saveImage(context, image);
     }
   }
 
   void _openGallery(BuildContext context) async {
-    File image = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (image != null) {
-      _saveImage(context, image);
+    final ImagePicker _picker = ImagePicker();
+    List<XFile> images = await _picker.pickMultiImage();
+    if (images != null) {
+      for (XFile image in images) {
+        await _saveImage(context, image);
+      }
     }
   }
 
-  void _saveImage(BuildContext context, File image) async {
+  void _saveImage(BuildContext context, XFile image) async {
     int count = await getImageCount(widget.topic);
 
     String mainDir = await getMainDirectory(widget.topic);
     String path = mainDir + '/' + count.toString();
-    image.copy(path);
+    image.saveTo(path);
 
     String thDir = await getThumbnailDirectory(widget.topic);
     String thumbnailPath = thDir + '/' + count.toString();
@@ -199,7 +203,7 @@ class TopicDetailsState extends State<TopicDetails> {
           return AlertDialog(
             title: new Text("Really delete images?"),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                   child: new Text("Yes"),
                   onPressed: () async {
                     for (int index in indexes) {
@@ -207,7 +211,7 @@ class TopicDetailsState extends State<TopicDetails> {
                     }
                     Navigator.pop(context, true);
                   }),
-              new FlatButton(
+              new TextButton(
                 child: new Text("No"),
                 onPressed: () {
                   Navigator.pop(context, false);

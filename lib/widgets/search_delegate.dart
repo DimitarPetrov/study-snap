@@ -86,7 +86,7 @@ class _WordSuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subhead;
+    final textTheme = Theme.of(context).textTheme.subtitle1;
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (BuildContext context, int i) {

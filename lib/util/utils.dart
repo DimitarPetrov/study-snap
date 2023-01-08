@@ -41,6 +41,37 @@ Future<List<File>> getImages(String title) async {
   return topicHome.list().map((f) => File(f.path)).toList();
 }
 
+Future reorder(String title, Map<int, int> newOrder) async {
+  print(newOrder);
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+
+  Directory thumbnailsHome =
+      new Directory(appDocDir.uri.resolve(encode(title)).path + "_th");
+  await reorderDirectory(thumbnailsHome, newOrder);
+
+  Directory topicHome =
+      new Directory(appDocDir.uri.resolve(encode(title)).path);
+  await reorderDirectory(topicHome, newOrder);
+}
+
+Future reorderDirectory(Directory dir, Map<int, int> newOrder) async {
+  return dir.list().forEach((f) {
+    int oldSeq = extractSequence(f.path);
+    int newSeq = newOrder[oldSeq];
+    if (oldSeq != newSeq) {
+      print("Renaming file " + f.path + " -> " + newSeq.toString());
+      f.renameSync(dir.path + "/" + newSeq.toString() + "_tmp");
+    }
+  }).whenComplete(() {
+    dir.list().forEach((f) {
+      if (basename(f.path).contains("_tmp")) {
+        print("Removing tmp from file " + f.path);
+        f.renameSync( dir.path + "/" + basename(f.path).replaceAll("_tmp", ""));
+      }
+    });
+  });
+}
+
 Future<File> getOriginalImage(String title, int sequence) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String imagePath =

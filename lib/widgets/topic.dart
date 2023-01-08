@@ -51,7 +51,7 @@ class TopicWidget extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                           topic.title,
-                          style: Theme.of(context).textTheme.subtitle,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                         subtitle: Padding(
                           padding: EdgeInsets.only(top: 7.5),
@@ -67,6 +67,7 @@ class TopicWidget extends StatelessWidget {
                 Divider(),
                 Expanded(
                   child: Grid(
+                    subject: subject,
                     topic: topic,
                     clickable: false,
                     controller: controller,

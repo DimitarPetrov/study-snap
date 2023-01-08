@@ -11,7 +11,7 @@ description: Flutter app for managing study materials in form of photos.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+2
+version: 1.1.0+4
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -19,28 +19,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  scoped_model: ^1.0.0
-  json_annotation: ^2.0.0
-  build_runner: ^1.0.0
-  json_serializable: ^2.0.0
-  shared_preferences: ^0.5.1+2
-  image_picker: ^0.5.0+9
-  path_provider: ^0.5.0+1
-  flutter_native_image:
-    git: https://github.com/btastic/flutter_native_image.git
+  scoped_model: ^1.1.0
+  json_annotation: ^3.1.1
+  build_runner: ^1.11.5
+  json_serializable: ^3.5.1
+  shared_preferences: ^2.0.6
+  image_picker: ^0.8.4+6
+  path_provider: ^2.0.8
+  flutter_native_image: ^0.0.6+1
   esys_flutter_share:
-    git: https://github.com/esysberlin/esys-flutter-share
-  photo_view: ^0.2.4
-  firebase_admob: ^0.9.0
+    git:
+      url: https://github.com/cihadturhan/esys-flutter-share.git
+      ref: nullsafety+embedding-2
+  photo_view: ^0.12.0
+  google_mobile_ads: ^2.2.0
+  drag_and_drop_gridview: ^1.0.8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.7.0
+  flutter_launcher_icons: ^0.9.1
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

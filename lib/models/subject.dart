@@ -20,6 +20,10 @@ class Subject {
     topics[topics.indexOf(topic)].addIndex(index);
   }
 
+  void setIndexes(Topic topic, List<int> indexes) {
+    topics[topics.indexOf(topic)].setIndexes(indexes);
+  }
+
   void removeIndex(Topic topic, int index) {
     topics[topics.indexOf(topic)].removeIndex(index);
   }
