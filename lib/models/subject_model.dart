@@ -11,7 +11,7 @@ class SubjectModel extends Model {
 
   final List<Subject> subjects;
 
-  SubjectModel({this.subjects});
+  SubjectModel({required this.subjects});
 
   void add(Subject subject) {
     subjects.add(subject);
@@ -52,7 +52,7 @@ class SubjectModel extends Model {
     subjects.sort((a,b) => reverse ? b.title.compareTo(a.title) : a.title.compareTo(b.title));
   }
 
-  Subject getByTitle(String title) {
+  Subject? getByTitle(String title) {
     for(Subject subject in subjects) {
       if(subject.title == title) {
         return subject;
@@ -61,8 +61,8 @@ class SubjectModel extends Model {
     return null;
   }
 
-  Topic getTopicByTitle(String subjectTitle, topicTitle) {
-    for(Topic topic in getByTitle(subjectTitle).topics) {
+  Topic? getTopicByTitle(String subjectTitle, topicTitle) {
+    for(Topic topic in getByTitle(subjectTitle)!.topics) {
       if(topic.title == topicTitle) {
         return topic;
       }

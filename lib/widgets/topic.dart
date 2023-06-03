@@ -9,7 +9,7 @@ class TopicWidget extends StatelessWidget {
   final Topic topic;
   final ScrollController controller;
 
-  TopicWidget({Key key, this.subject, this.topic, this.controller})
+  TopicWidget({Key? key, required this.subject, required this.topic, required this.controller})
       : super(key: key);
 
   @override
@@ -45,19 +45,19 @@ class TopicWidget extends StatelessWidget {
                     Icon(
                       Icons.collections,
                       size: 30,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     Expanded(
                       child: ListTile(
                         title: Text(
                           topic.title,
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         subtitle: Padding(
                           padding: EdgeInsets.only(top: 7.5),
                           child: Text(
                             topic.description,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
                       ),

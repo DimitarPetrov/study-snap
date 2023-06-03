@@ -10,7 +10,7 @@ class Subject {
   String description;
   List<Topic> topics;
 
-  Subject({this.title, this.description, this.topics});
+  Subject({required this.title, required this.description, required this.topics});
 
   void add(Topic topic) {
     topics.add(topic);
@@ -45,7 +45,7 @@ class Subject {
     return false;
   }
 
-  Topic getByTitle(String title) {
+  Topic? getByTitle(String title) {
     for(Topic topic in topics) {
       if(topic.title == title) {
         return topic;

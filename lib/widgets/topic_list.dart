@@ -9,7 +9,7 @@ import 'package:study_snap/widgets/topic.dart';
 class TopicList extends StatefulWidget {
   final Subject subject;
 
-  TopicList({Key key, this.subject}) : super(key: key);
+  TopicList({Key? key, required this.subject}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,9 +19,9 @@ class TopicList extends StatefulWidget {
 
 class _TopicListState extends State<TopicList> {
   List<Topic> topics;
-  ScrollController _gridController;
+  late ScrollController _gridController;
 
-  _TopicListState({this.topics});
+  _TopicListState({required this.topics});
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _TopicListState extends State<TopicList> {
               .map((topic) => Dismissible(
                     key: Key(topic.title),
                     direction: DismissDirection.up,
-                    confirmDismiss: (direction) {
+                    confirmDismiss: (direction) async {
                       _showDialog(topic);
                     },
                     background: Container(

@@ -11,7 +11,7 @@ import 'package:study_snap/widgets/subject.dart';
 class SubjectList extends StatefulWidget {
   final List<Subject> subjects;
 
-  SubjectList({Key key, this.subjects}) : super(key: key);
+  SubjectList({Key? key, required this.subjects}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -22,7 +22,7 @@ class SubjectList extends StatefulWidget {
 class _SubjectListState extends State<SubjectList> {
   List<Subject> subjects;
 
-  _SubjectListState({this.subjects});
+  _SubjectListState({required this.subjects});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _SubjectListState extends State<SubjectList> {
             .map((subject) => Dismissible(
                   key: Key(subject.title),
                   direction: DismissDirection.horizontal,
-                  confirmDismiss: (direction) {
+                  confirmDismiss: (direction) async {
                     _showDialog(context, subject);
                   },
                   background: Container(

@@ -30,7 +30,7 @@ Future<List<ImageDTO>> getThumbnails(String title) async {
   return topicHome
       .list()
       .map((f) =>
-          ImageDTO(image: Image.file(f), sequence: extractSequence(f.path)))
+          ImageDTO(image: Image.file(f as File), sequence: extractSequence(f.path)))
       .toList();
 }
 
@@ -57,7 +57,7 @@ Future reorder(String title, Map<int, int> newOrder) async {
 Future reorderDirectory(Directory dir, Map<int, int> newOrder) async {
   return dir.list().forEach((f) {
     int oldSeq = extractSequence(f.path);
-    int newSeq = newOrder[oldSeq];
+    int newSeq = newOrder[oldSeq]!;
     if (oldSeq != newSeq) {
       print("Renaming file " + f.path + " -> " + newSeq.toString());
       f.renameSync(dir.path + "/" + newSeq.toString() + "_tmp");
@@ -106,7 +106,7 @@ void deleteImage(
       (SubjectModel model) => model.removeIndex(subject, topic, index));
 }
 
-void updateModel(BuildContext context, UpdateModelCallback callback) async {
+Future<void> updateModel(BuildContext context, UpdateModelCallback callback) async {
   final prefs = await SharedPreferences.getInstance();
   SubjectModel model = ScopedModel.of<SubjectModel>(context);
   callback(model);
@@ -152,9 +152,9 @@ void renameDirs(String oldTitle, String newTitle) async {
   new Directory(thDir).renameSync(newThDir);
 
   final prefs = await SharedPreferences.getInstance();
-  int count = prefs.getInt(oldTitle);
+  int? count = prefs.getInt(oldTitle);
   prefs.remove(oldTitle);
-  prefs.setInt(newTitle, count);
+  prefs.setInt(newTitle, count!);
 }
 
 void persistSubjectsJson(String json) async {
@@ -172,5 +172,5 @@ Future<File> generateThumbnail(String path) async {
       await FlutterNativeImage.getImageProperties(path);
   return FlutterNativeImage.compressImage(path,
       targetWidth: 500,
-      targetHeight: (properties.height * 500 / properties.width).round());
+      targetHeight: (properties.height! * 500 / properties.width!).round());
 }

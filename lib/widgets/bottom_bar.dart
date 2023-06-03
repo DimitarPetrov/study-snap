@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class BottomBar extends StatelessWidget {
   final BannerAd bannerAd;
 
-  BottomBar({Key key, this.bannerAd})
+  BottomBar({Key? key, required this.bannerAd})
       : super(key: key);
 
   @override

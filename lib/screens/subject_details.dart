@@ -16,7 +16,7 @@ import 'package:study_snap/widgets/topic_list.dart';
 class SubjectDetails extends StatefulWidget {
   final Subject subject;
 
-  SubjectDetails({Key key, this.subject}) : super(key: key);
+  SubjectDetails({Key? key, required this.subject}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,8 +26,8 @@ class SubjectDetails extends StatefulWidget {
 
 class SubjectDetailsState extends State<SubjectDetails> {
   bool _reverse = false;
-  SearchTitleDelegate _searchDelegate;
-  BannerAd _bannerAd;
+  late SearchTitleDelegate _searchDelegate;
+  late BannerAd _bannerAd;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class SubjectDetailsState extends State<SubjectDetails> {
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -137,7 +137,7 @@ class SubjectDetailsState extends State<SubjectDetails> {
       context,
       MaterialPageRoute(
         builder: (context) => TopicDetails(
-            subject: widget.subject, topic: widget.subject.getByTitle(query)),
+            subject: widget.subject, topic: widget.subject.getByTitle(query)!),
       ),
     );
     Navigator.pop(context);
@@ -145,14 +145,15 @@ class SubjectDetailsState extends State<SubjectDetails> {
 
   Future showSearchPage(
       BuildContext context, SearchTitleDelegate searchDelegate) async {
-    await showSearch<String>(
+    await showSearch<String?>(
       context: context,
       delegate: searchDelegate,
     );
   }
 
-  String _validateEdit(BuildContext context, Subject subject, String value) {
+  String? _validateEdit(BuildContext context, Subject? subject, String? value) {
     SubjectModel model = ScopedModel.of<SubjectModel>(context);
+    if (value == null || value.isEmpty) return 'Title of the subject can not be empty';
     if (model.contains(value)) return 'Subject with this title already exists!';
     return null;
   }
@@ -171,10 +172,10 @@ class SubjectDetailsState extends State<SubjectDetails> {
     Navigator.pop(context);
   }
 
-  String _validateTitle(BuildContext context, Subject subject, String value) {
-    if (value.isEmpty) return 'Title of the topic can not be empty';
+  String? _validateTitle(BuildContext context, Subject? subject, String? value) {
+    if (value == null || value.isEmpty) return 'Title of the topic can not be empty';
     SubjectModel model = ScopedModel.of<SubjectModel>(context);
-    if (model.subjects[model.subjects.indexOf(subject)].contains(value))
+    if (model.subjects[model.subjects.indexOf(subject!)].contains(value))
       return 'Topic with this title already exists!';
     return null;
   }
