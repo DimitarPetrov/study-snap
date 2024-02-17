@@ -7,7 +7,7 @@ class TwoOptionsDialog extends StatelessWidget {
   final String second;
   final VoidCallback secondOnTap;
 
-  TwoOptionsDialog({Key key, this.first, this.second, this.firstOnTap, this.secondOnTap}) : super(key:key);
+  TwoOptionsDialog({Key? key, required this.first, required this.second, required this.firstOnTap, required this.secondOnTap}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {

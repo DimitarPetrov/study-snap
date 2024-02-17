@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class BottomBar extends StatelessWidget {
   final BannerAd bannerAd;
 
-  BottomBar({Key key, this.bannerAd})
+  BottomBar({Key? key, required this.bannerAd})
       : super(key: key);
 
   @override
@@ -15,8 +15,8 @@ class BottomBar extends StatelessWidget {
         child: Row(
           children: <Widget>[
             SizedBox(
-              width: bannerAd.size.width.toDouble(),
-              height: bannerAd.size.height.toDouble(),
+              width: 320,
+              height: 50,
               child: AdWidget(ad: bannerAd),
             )
           ],

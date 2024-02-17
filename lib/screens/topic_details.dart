@@ -20,7 +20,7 @@ class TopicDetails extends StatefulWidget {
   final Subject subject;
   final Topic topic;
 
-  TopicDetails({Key key, this.subject, this.topic}) : super(key: key);
+  TopicDetails({Key? key, required this.subject, required this.topic}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -31,7 +31,7 @@ class TopicDetails extends StatefulWidget {
 class TopicDetailsState extends State<TopicDetails> {
   bool selecting = false;
   StreamController<Event> _controller = StreamController<Event>();
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class TopicDetailsState extends State<TopicDetails> {
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -159,7 +159,7 @@ class TopicDetailsState extends State<TopicDetails> {
 
   void _openCamera(BuildContext context) async {
     final ImagePicker _picker = ImagePicker();
-    XFile image = await _picker.pickImage(
+    XFile? image = await _picker.pickImage(
       source: ImageSource.camera,
     );
     if (image != null) {
@@ -169,7 +169,7 @@ class TopicDetailsState extends State<TopicDetails> {
 
   void _openGallery(BuildContext context) async {
     final ImagePicker _picker = ImagePicker();
-    List<XFile> images = await _picker.pickMultiImage();
+    List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
       for (XFile image in images) {
         await _saveImage(context, image);
@@ -177,7 +177,7 @@ class TopicDetailsState extends State<TopicDetails> {
     }
   }
 
-  void _saveImage(BuildContext context, XFile image) async {
+  Future<void> _saveImage(BuildContext context, XFile image) async {
     int count = await getImageCount(widget.topic);
 
     String mainDir = await getMainDirectory(widget.topic);
@@ -222,9 +222,10 @@ class TopicDetailsState extends State<TopicDetails> {
         });
   }
 
-  String _validateEdit(BuildContext context, Subject subject, String value) {
+  String? _validateEdit(BuildContext context, Subject? subject, String? value) {
     SubjectModel model = ScopedModel.of<SubjectModel>(context);
-    if (model.subjects[model.subjects.indexOf(subject)].contains(value))
+    if (value == null || value.isEmpty) return "Title of the topic can not be empty";
+    if (model.subjects[model.subjects.indexOf(subject!)].contains(value))
       return 'Topic with this title already exists!';
     return null;
   }

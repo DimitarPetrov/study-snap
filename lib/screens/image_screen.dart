@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:vocsy_esys_flutter_share/vocsy_esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:photo_view/photo_view.dart';
@@ -17,7 +17,7 @@ class ImageScreen extends StatefulWidget {
   final DeleteCallback deleteCallback;
 
   ImageScreen(
-      {Key key, this.topic, this.images, this.index, this.deleteCallback})
+      {Key? key, required this.topic, required this.images, required this.index, required this.deleteCallback})
       : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class ImageScreen extends StatefulWidget {
 }
 
 class ImageScreenState extends State<ImageScreen> {
-  int currentIndex;
+  late int currentIndex;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class ImageScreenState extends State<ImageScreen> {
               onPressed: () async {
                 int sequence = widget.topic.indexes[currentIndex];
                 File f = await getOriginalImage(widget.topic.title, sequence);
-                await Share.file(
+                await VocsyShare.file(
                     widget.topic.title,
                     sequence.toString() + ".jpg",
                     f.readAsBytesSync(),

@@ -21,10 +21,10 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   bool _reverse = false;
-  SubjectModel _subjects;
-  List<String> _titles;
-  SearchTitleDelegate _searchDelegate;
-  BannerAd _bannerAd;
+  late SubjectModel _subjects;
+  late List<String> _titles;
+  late SearchTitleDelegate _searchDelegate;
+  late BannerAd _bannerAd;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class HomeState extends State<Home> {
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -100,7 +100,7 @@ class HomeState extends State<Home> {
       context,
       CupertinoPageRoute(
         builder: (context) => SubjectDetails(
-              subject: model.getByTitle(query),
+              subject: model.getByTitle(query)!,
             ),
       ),
     );
@@ -109,14 +109,14 @@ class HomeState extends State<Home> {
 
   Future showSearchPage(
       BuildContext context, SearchTitleDelegate searchDelegate) async {
-    await showSearch<String>(
+    await showSearch<String?>(
       context: context,
       delegate: searchDelegate,
     );
   }
 
-  String _validateTitle(BuildContext context, Subject subject, String value) {
-    if (value.isEmpty) return 'Title of the subject can not be empty';
+  String? _validateTitle(BuildContext context, Subject? subject, String? value) {
+    if (value == null || value.isEmpty) return 'Title of the subject can not be empty';
     SubjectModel model = ScopedModel.of<SubjectModel>(context);
     if (model.contains(value)) return 'Subject with this title already exists!';
     return null;

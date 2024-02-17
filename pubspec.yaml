@@ -11,29 +11,29 @@ description: Flutter app for managing study materials in form of photos.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+4
+version: 1.1.1+5
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  scoped_model: ^1.1.0
-  json_annotation: ^3.1.1
-  build_runner: ^1.11.5
-  json_serializable: ^3.5.1
+  scoped_model: ^2.0.0
+  json_annotation: ^4.8.1
+  build_runner: ^2.4.4
+  json_serializable: ^6.7.0
   shared_preferences: ^2.0.6
   image_picker: ^0.8.4+6
   path_provider: ^2.0.8
   flutter_native_image: ^0.0.6+1
-  esys_flutter_share:
-    git:
-      url: https://github.com/cihadturhan/esys-flutter-share.git
-      ref: nullsafety+embedding-2
-  photo_view: ^0.12.0
+  vocsy_esys_flutter_share: ^1.0.2
+  photo_view: ^0.14.0
   google_mobile_ads: ^2.2.0
-  drag_and_drop_gridview: ^1.0.8
+  drag_and_drop_gridview:
+    git:
+      url: https://github.com/DevOrbiter/drag_and_drop_gridview.git
+      ref: master
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

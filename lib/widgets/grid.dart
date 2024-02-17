@@ -6,7 +6,7 @@ import 'package:study_snap/models/topic.dart';
 import 'package:study_snap/screens/image_screen.dart';
 import 'package:study_snap/util/event.dart';
 import 'package:study_snap/util/utils.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:vocsy_esys_flutter_share/vocsy_esys_flutter_share.dart';
 import 'package:drag_and_drop_gridview/devdrag.dart';
 
 import '../models/subject.dart';
@@ -15,20 +15,20 @@ class Grid extends StatefulWidget {
   final Subject subject;
   final Topic topic;
   final bool clickable;
-  final DeleteCallback deleteCallback;
-  final ScrollController controller;
-  final Stream<Event> stream;
-  final VoidCallback selection;
+  final DeleteCallback? deleteCallback;
+  final ScrollController? controller;
+  final Stream<Event>? stream;
+  final VoidCallback? selection;
 
   Grid({
-    Key key,
-    this.topic,
-    this.clickable,
+    Key? key,
+    required this.topic,
+    required this.clickable,
     this.deleteCallback,
     this.controller,
     this.stream,
     this.selection,
-    this.subject,
+    required this.subject,
   }) : super(key: key);
 
   @override
@@ -38,16 +38,16 @@ class Grid extends StatefulWidget {
 }
 
 class GridState extends State<Grid> {
-  bool selecting;
-  List<int> selected = List<int>();
+  late bool selecting;
+  List<int> selected = List<int>.empty(growable: true);
 
-  GridState({this.selecting});
+  GridState();
 
   @override
   void initState() {
     selecting = false;
     if (widget.stream != null) {
-      widget.stream.listen((event) {
+      widget.stream?.listen((event) {
         if (event == Event.DELETE) {
           if (selecting) {
             if (selected.isNotEmpty) _onDelete();
@@ -97,7 +97,7 @@ class GridState extends State<Grid> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: new CircularProgressIndicator());
           }
-          snapshot.data.sort((i1, i2) => i1.sequence.compareTo(i2.sequence));
+          snapshot.data!.sort((i1, i2) => i1.sequence.compareTo(i2.sequence));
           return DragAndDropGridView(
             controller: widget.controller,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,12 +118,12 @@ class GridState extends State<Grid> {
             },
             onReorder: (oldIndex, newIndex) {
               print("reorder: " + oldIndex.toString() + " -> " + newIndex.toString());
-              dynamic itemToMove = snapshot.data.removeAt(oldIndex);
-              snapshot.data.insert(newIndex, itemToMove);
+              dynamic itemToMove = snapshot.data!.removeAt(oldIndex);
+              snapshot.data!.insert(newIndex, itemToMove);
 
               Map<int,int> newOrder = new Map();
-              for (int i = 0; i < snapshot.data.length; ++i) {
-                newOrder[snapshot.data[i].sequence] = i;
+              for (int i = 0; i < snapshot.data!.length; ++i) {
+                newOrder[snapshot.data![i].sequence] = i;
               }
 
               reorder(widget.topic.title, newOrder).whenComplete(() {
@@ -132,12 +132,12 @@ class GridState extends State<Grid> {
                 });
               });
             },
-            itemCount: snapshot.data.length,
+            itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return GridTile(
                 child: widget.clickable
-                    ? _clickableTile(context, snapshot.data[index])
-                    : snapshot.data[index].image,
+                    ? _clickableTile(context, snapshot.data![index])
+                    : snapshot.data![index].image,
               );
             },
             isCustomFeedback: true,
@@ -147,7 +147,7 @@ class GridState extends State<Grid> {
                 height: height,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: snapshot.data[index].image.image,
+                    image: snapshot.data![index].image.image,
                   ),
                 ),
               );
@@ -174,7 +174,7 @@ class GridState extends State<Grid> {
                   topic: widget.topic,
                   images: images,
                   index: widget.topic.indexes.indexOf(image.sequence),
-                  deleteCallback: widget.deleteCallback,
+                  deleteCallback: widget.deleteCallback!,
                 ),
               ),
             );
@@ -192,7 +192,7 @@ class GridState extends State<Grid> {
           setState(() {
             if (!selecting) {
               selecting = !selecting;
-              widget.selection();
+              widget.selection!();
             }
           });
           if (selected.contains(image.sequence)) {
@@ -219,7 +219,7 @@ class GridState extends State<Grid> {
               value: selected.contains(image.sequence),
               onChanged: (value) {
                 setState(() {
-                  if (value) {
+                  if (value != null && value) {
                     selected.add(image.sequence);
                   } else {
                     selected.remove(image.sequence);
@@ -234,7 +234,7 @@ class GridState extends State<Grid> {
   }
 
   void _onDelete() {
-    widget.deleteCallback(context, selected);
+    widget.deleteCallback!(context, selected);
   }
 
   void _onShare() async {
@@ -245,6 +245,6 @@ class GridState extends State<Grid> {
       List<int> v = f.readAsBytesSync();
       data[k] = v;
     }
-    await Share.files('images', data, 'image/jpg');
+    await VocsyShare.files('images', data, 'image/jpg');
   }
 }

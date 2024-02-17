@@ -6,6 +6,6 @@ class ImageDTO {
   final int sequence;
   final Image image;
 
-  ImageDTO({this.sequence, this.image});
+  ImageDTO({required this.sequence, required this.image});
 
 }

@@ -6,7 +6,7 @@ import 'package:study_snap/screens/subject_details.dart';
 class SubjectWidget extends StatelessWidget {
   final Subject subject;
 
-  SubjectWidget({Key key, this.subject}) : super(key: key);
+  SubjectWidget({Key? key, required this.subject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class SubjectWidget extends StatelessWidget {
         Icons.subject,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      title: Text(subject.title, style: Theme.of(context).textTheme.subtitle2,),
+      title: Text(subject.title, style: Theme.of(context).textTheme.titleSmall,),
       subtitle: Text(subject.description),
       trailing: Icon(
         Icons.arrow_forward_ios,

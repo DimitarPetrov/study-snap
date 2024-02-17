@@ -9,7 +9,7 @@ class Topic {
   String description;
   List<int> indexes;
 
-  Topic({this.title, this.description, this.indexes});
+  Topic({required this.title, required this.description, required this.indexes});
 
   void addIndex(int index) {
     indexes.add(index);

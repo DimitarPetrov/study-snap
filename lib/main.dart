@@ -16,14 +16,14 @@ void main() async {
   final model = SubjectModel.fromJson(json.decode(jsonModel));
 
   WidgetsFlutterBinding.ensureInitialized();
-  await MobileAds.instance.initialize(); // prod
-  // await MobileAds.instance.initialize().then((InitializationStatus status) {
-  //   MobileAds.instance.updateRequestConfiguration(
-  //     RequestConfiguration(testDeviceIds: <String>[
-  //       '0819A79F3F94F37FBABD456D6CF92101', // this is test device id, u can view on console
-  //     ]),
-  //   );
-  // }); // delete this code if release
+  // await MobileAds.instance.initialize(); // prod
+  await MobileAds.instance.initialize().then((InitializationStatus status) {
+    MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: <String>[
+        '0819A79F3F94F37FBABD456D6CF92101', // this is test device id, u can view on console
+      ]),
+    );
+  }); // delete this code if release
 
   runApp(
       ScopedModel<SubjectModel>(

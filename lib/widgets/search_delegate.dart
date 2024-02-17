@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 typedef void OnSelectCallback(String query);
 
-class SearchTitleDelegate extends SearchDelegate<String> {
+class SearchTitleDelegate extends SearchDelegate<String?> {
   final List<String> words;
   final OnSelectCallback onSelectCallback;
 
-  SearchTitleDelegate({this.onSelectCallback, this.words});
+  SearchTitleDelegate({required this.onSelectCallback, required this.words});
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -55,7 +55,7 @@ class SearchTitleDelegate extends SearchDelegate<String> {
   }
 
   @override
-  List<Widget> buildActions(BuildContext context) {
+  List<Widget>? buildActions(BuildContext context) {
     if (query.isNotEmpty) {
       return <Widget>[
         IconButton(
@@ -78,7 +78,7 @@ class SearchTitleDelegate extends SearchDelegate<String> {
 }
 
 class _WordSuggestionList extends StatelessWidget {
-  const _WordSuggestionList({this.suggestions, this.query, this.onSelected});
+  const _WordSuggestionList({required this.suggestions, required this.query, required this.onSelected});
 
   final List<String> suggestions;
   final String query;
@@ -86,7 +86,7 @@ class _WordSuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subtitle1;
+    final textTheme = Theme.of(context).textTheme.titleMedium!;
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (BuildContext context, int i) {
@@ -94,7 +94,7 @@ class _WordSuggestionList extends StatelessWidget {
         return ListTile(
           leading: Icon(
             Icons.subject,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           // Highlight the substring that matched the query.
           title: RichText(
