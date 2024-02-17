@@ -39,7 +39,7 @@ class Grid extends StatefulWidget {
 
 class GridState extends State<Grid> {
   late bool selecting;
-  List<int> selected = List<int>.empty();
+  List<int> selected = List<int>.empty(growable: true);
 
   GridState();
 

@@ -15,8 +15,8 @@ class BottomBar extends StatelessWidget {
         child: Row(
           children: <Widget>[
             SizedBox(
-              width: bannerAd.size.width.toDouble(),
-              height: bannerAd.size.height.toDouble(),
+              width: 320,
+              height: 50,
               child: AdWidget(ad: bannerAd),
             )
           ],
