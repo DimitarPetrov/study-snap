@@ -71,3 +71,5 @@
 
 .flutter-plugins-dependencies
 flutter_export_environment.sh
+key.jks
+android/key.properties
