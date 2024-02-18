@@ -122,7 +122,7 @@ class HomeState extends State<Home> {
     return null;
   }
 
-  void _handleSubmitted(BuildContext context, Subject subject, String title,
+  void _handleSubmitted(BuildContext context, Subject? subject, String title,
       String description) async {
     updateModel(
         context,

@@ -5,7 +5,7 @@ import 'package:study_snap/models/subject.dart';
 typedef String? ValidateCallback(
     BuildContext context, Subject? subject, String? value);
 typedef void SubmitCallback(
-    BuildContext context, Subject subject, String title, String description);
+    BuildContext context, Subject? subject, String title, String description);
 
 class AddTopicForm extends StatefulWidget {
   final Subject? subject;
@@ -80,7 +80,7 @@ class AddTopicFormState extends State<AddTopicForm> {
                 if (form != null && form.validate()) {
                   form.save();
                   widget.handleSubmitted(
-                      context, widget.subject!, title, description);
+                      context, widget.subject, title, description);
                 }
               },
             ),

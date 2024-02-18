@@ -158,10 +158,10 @@ class SubjectDetailsState extends State<SubjectDetails> {
     return null;
   }
 
-  void _handleEdit(BuildContext context, Subject subject, String title,
+  void _handleEdit(BuildContext context, Subject? subject, String title,
       String description) async {
     updateModel(context, (model) {
-      Subject s = model.subjects[model.subjects.indexOf(subject)];
+      Subject s = model.subjects[model.subjects.indexOf(subject!)];
       if (title.isNotEmpty) {
         s.title = title;
       }
@@ -180,11 +180,11 @@ class SubjectDetailsState extends State<SubjectDetails> {
     return null;
   }
 
-  void _handleSubmitted(BuildContext context, Subject subject, String title,
+  void _handleSubmitted(BuildContext context, Subject? subject, String title,
       String description) async {
     updateModel(
         context,
-        (model) => model.addTopic(subject,
+        (model) => model.addTopic(subject!,
             new Topic(title: title, description: description, indexes: [])));
     createDirs(title);
     Navigator.pop(context);

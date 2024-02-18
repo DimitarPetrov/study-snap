@@ -230,10 +230,10 @@ class TopicDetailsState extends State<TopicDetails> {
     return null;
   }
 
-  void _handleEdit(BuildContext context, Subject subject, String title,
+  void _handleEdit(BuildContext context, Subject? subject, String title,
       String description) async {
     updateModel(context, (model) {
-      Subject s = model.subjects[model.subjects.indexOf(subject)];
+      Subject s = model.subjects[model.subjects.indexOf(subject!)];
       Topic t = s.topics[s.topics.indexOf(widget.topic)];
       if (title.isNotEmpty) {
         String oldTitle = t.title;
